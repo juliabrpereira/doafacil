@@ -1,0 +1,47 @@
+# Diretrizes para agentes de IA — Projeto DOA FÁCIL
+
+Este arquivo orienta qualquer agente de auxílio de programação (Cursor,
+Claude Code, Codex CLI ou similar) que atue neste repositório. O objetivo é
+manter o desenvolvimento consistente com o fluxo SDD (Spec-Driven
+Development) adotado pela equipe.
+
+## Contexto do sistema
+
+O DOA FÁCIL é um gerenciador de doações que intermedeia doadores individuais
+e ONGs, reduzindo o desperdício de itens doáveis. Nesta primeira entrega o
+projeto é um MVP técnico: apenas o núcleo de domínio (`app/domain.py`) foi
+implementado, sem interface, banco de dados, autenticação ou integração de
+pagamento. A confirmação de uma doação é apenas uma mudança de estado
+validada pelo domínio — nenhum dinheiro real é movimentado.
+
+## Regras obrigatórias para qualquer alteração
+
+1. **Ler a especificação antes de codificar.** Toda mudança de comportamento
+   deve estar de acordo com `docs/especificacao-sdd.md`. Se a tarefa exigir
+   um comportamento não previsto, a especificação deve ser atualizada
+   primeiro, com o motivo do ajuste registrado na seção de refinamentos.
+2. **Manter o domínio independente.** O código em `app/domain.py` não deve
+   importar frameworks web, drivers de banco de dados ou SDKs de pagamento.
+   Essas integrações pertencem a entregas futuras.
+3. **Usar `Decimal` para qualquer valor monetário.** Nunca usar `float` para
+   representar dinheiro.
+4. **Todo código novo precisa de teste correspondente** em
+   `tests/test_domain.py`, cobrindo o caminho feliz e ao menos um caso de
+   borda relevante.
+5. **Rodar o harness antes de propor a alteração como concluída:**
+   `pytest -q`. Nenhuma tarefa é considerada pronta com testes quebrados.
+6. **Revisão humana é obrigatória.** Sugestões geradas pelo agente devem ser
+   lidas e aprovadas por um integrante antes do commit. O agente não deve
+   fazer push ou merge diretamente.
+7. **Trabalhar sempre em branch `feature/<tarefa>`,** nunca diretamente em
+   `main` ou `develop`.
+8. **Documentar o uso do agente no Pull Request:** qual tarefa foi apoiada,
+   quais arquivos foram alterados, quais decisões foram revisadas pela
+   equipe e qual foi o resultado do harness (`pytest -q`).
+
+## Fora de escopo nesta entrega
+
+Não gerar código de interface gráfica, API HTTP, camada de persistência,
+autenticação de usuários, notificações ou integração com gateways de
+pagamento. Essas frentes ficam para as próximas sprints, conforme o
+`Backlog do Produto - DoaFácil`.
