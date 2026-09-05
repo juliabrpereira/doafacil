@@ -48,8 +48,21 @@ pytest -q
 Resultado esperado:
 
 ```text
-7 passed in 0.02s
+12 passed in 0.08s
 ```
+
+## Interface de demonstração
+
+Para abrir uma tela local com o botão **Confirmar doação**, execute:
+
+```bash
+python -m app.web
+```
+
+Depois, acesse `http://localhost:8000` no navegador. A tela exibe uma doação
+de exemplo; ao clicar no botão, ela chama `confirmar_doacao` e altera o estado
+para `CONFIRMADA`. Os dados permanecem somente em memória enquanto o servidor
+está em execução.
 
 ## Como executar com Docker
 
