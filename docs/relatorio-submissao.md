@@ -27,8 +27,9 @@ retirada.
 Nesta primeira entrega, o escopo foi deliberadamente limitado a um **MVP
 técnico**: o núcleo de domínio, responsável por validar a criação e a
 confirmação de doações. O repositório inclui uma interface web mínima, em
-memória e sem framework, para demonstrar localmente essa confirmação. Não
-há persistência em banco de dados, autenticação ou integração de pagamento
+memória e sem framework, para demonstrar localmente a criação e a confirmação
+de doações. Não há persistência em banco de dados, autenticação ou integração
+de pagamento
 — a "confirmação" de uma doação é apenas uma mudança de estado validada por
 regras de negócio, sem movimentação financeira real.
 
@@ -92,8 +93,8 @@ registrada em `adr/ADR-001.md`.
 
 ## 7. Test harness e evidências de execução
 
-A suíte de testes (`tests/test_domain.py`) cobre o caminho feliz e os
-seguintes casos de borda:
+A suíte de testes (`tests/`) cobre o caminho feliz e os seguintes casos de
+borda:
 
 | Cenário validado | Resultado esperado |
 |---|---|
@@ -104,12 +105,14 @@ seguintes casos de borda:
 | Nome vazio ou e-mail inválido | Operação rejeitada (`DomainError`) |
 | Confirmação de doação pendente | Estado alterado para `CONFIRMADA` |
 | Confirmação duplicada | Operação rejeitada (`DomainError`) |
+| Criação pela interface web | Doação criada e exibida como `PENDENTE` |
+| Navegação da interface web | Landing page direciona para criação e listagem |
 
 ### Log da execução local (`pytest -q`)
 
 ```text
-............                                                             [100%]
-12 passed in 0.08s
+.................                                                        [100%]
+17 passed in 1.10s
 ```
 
 
@@ -129,5 +132,3 @@ localmente e mantida apenas em memória. Ainda não há uma API HTTP para
 integrações, banco de dados, autenticação, notificações ou pagamento real.
 Essas limitações são intencionais nesta entrega e estão documentadas como
 escopo futuro no `Backlog do Produto - DoaFácil`.
-
-
