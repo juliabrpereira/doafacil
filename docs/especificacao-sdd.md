@@ -11,9 +11,11 @@ desperdício de itens e perda de tempo de ambos os lados.
 ## 2. Objetivo da sprint (Entrega 1)
 
 Validar as regras centrais do domínio de doações — criação e confirmação —
-antes de investir em interface, persistência ou integrações externas. O
-critério de sucesso desta entrega é um núcleo de domínio testável que
-implemente corretamente as regras de negócio descritas abaixo.
+de forma independente de persistência ou integrações externas. O critério de
+sucesso desta entrega é um núcleo de domínio testável que implemente
+corretamente as regras de negócio descritas abaixo. O repositório também
+inclui uma interface web mínima, em memória e sem framework, para demonstrar
+localmente a confirmação de uma doação; ela não faz parte do núcleo de domínio.
 
 ## 3. Requisitos Funcionais (RF)
 

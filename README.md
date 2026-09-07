@@ -8,7 +8,8 @@ de domínio.
 
 > Nesta primeira entrega o sistema **não movimenta dinheiro real**. A
 > "confirmação" de uma doação é apenas uma mudança de estado validada pelo
-> domínio, sem integração de pagamento, banco de dados ou interface.
+> domínio, sem integração de pagamento ou banco de dados. Há uma interface
+> web mínima, destinada exclusivamente à demonstração local.
 
 ## Estrutura do repositório
 
@@ -112,6 +113,8 @@ está em [`docs/especificacao-sdd.md`](docs/especificacao-sdd.md).
 
 ## Limitações atuais (escopo futuro)
 
-Interface gráfica, API HTTP, banco de dados, autenticação, notificações e
-pagamento real ainda não foram implementados. Essas frentes estão descritas
-no `Backlog do Produto - DoaFácil` e serão endereçadas em sprints futuras.
+A interface web disponível é apenas uma demonstração local, em memória e
+sem framework. Ainda não foram implementados uma API HTTP para integrações,
+banco de dados, autenticação, notificações ou pagamento real. Essas frentes
+estão descritas no `Backlog do Produto - DoaFácil` e serão endereçadas em
+sprints futuras.
