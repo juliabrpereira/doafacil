@@ -26,10 +26,12 @@ retirada.
 
 Nesta primeira entrega, o escopo foi deliberadamente limitado a um **MVP
 técnico**: o núcleo de domínio, responsável por validar a criação e a
-confirmação de doações. Não há interface, persistência em banco de dados,
-autenticação ou integração de pagamento — a "confirmação" de uma doação é
-apenas uma mudança de estado validada por regras de negócio, sem
-movimentação financeira real.
+confirmação de doações. O repositório inclui uma interface web mínima, em
+memória e sem framework, para demonstrar localmente a criação e a confirmação
+de doações. Não há persistência em banco de dados, autenticação ou integração
+de pagamento
+— a "confirmação" de uma doação é apenas uma mudança de estado validada por
+regras de negócio, sem movimentação financeira real.
 
 ## 4. Ambiente de desenvolvimento
 
@@ -86,12 +88,13 @@ A especificação completa está em `docs/especificacao-sdd.md` e cobre:
   borda (ex.: normalização de e-mail e uso obrigatório de `Decimal`).
 
 A decisão de manter o MVP como um núcleo de domínio Python independente,
-sem interface nem persistência, está registrada em `adr/ADR-001.md`.
+sem persistência e desacoplado da interface web de demonstração, está
+registrada em `adr/ADR-001.md`.
 
 ## 7. Test harness e evidências de execução
 
-A suíte de testes (`tests/test_domain.py`) cobre o caminho feliz e os
-seguintes casos de borda:
+A suíte de testes (`tests/`) cobre o caminho feliz e os seguintes casos de
+borda:
 
 | Cenário validado | Resultado esperado |
 |---|---|
@@ -102,12 +105,14 @@ seguintes casos de borda:
 | Nome vazio ou e-mail inválido | Operação rejeitada (`DomainError`) |
 | Confirmação de doação pendente | Estado alterado para `CONFIRMADA` |
 | Confirmação duplicada | Operação rejeitada (`DomainError`) |
+| Criação pela interface web | Doação criada e exibida como `PENDENTE` |
+| Navegação da interface web | Landing page direciona para criação e listagem |
 
 ### Log da execução local (`pytest -q`)
 
 ```text
-.......                                                                  [100%]
-7 passed in 0.02s
+.................                                                        [100%]
+17 passed in 1.10s
 ```
 
 
@@ -122,10 +127,8 @@ seguintes casos de borda:
 
 ## 9. Decisões e limitações atuais
 
-A versão atual não possui interface gráfica, API HTTP, banco de dados,
-autenticação, notificações ou pagamento real. Essas limitações são
-intencionais nesta entrega e estão documentadas como escopo futuro no
-`Backlog do Produto - DoaFácil`.
-
-
-
+A versão atual possui uma interface web de demonstração, executada
+localmente e mantida apenas em memória. Ainda não há uma API HTTP para
+integrações, banco de dados, autenticação, notificações ou pagamento real.
+Essas limitações são intencionais nesta entrega e estão documentadas como
+escopo futuro no `Backlog do Produto - DoaFácil`.

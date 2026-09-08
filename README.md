@@ -8,7 +8,8 @@ de domínio.
 
 > Nesta primeira entrega o sistema **não movimenta dinheiro real**. A
 > "confirmação" de uma doação é apenas uma mudança de estado validada pelo
-> domínio, sem integração de pagamento, banco de dados ou interface.
+> domínio, sem integração de pagamento ou banco de dados. Há uma interface
+> web mínima, destinada exclusivamente à demonstração local.
 
 ## Estrutura do repositório
 
@@ -48,8 +49,23 @@ pytest -q
 Resultado esperado:
 
 ```text
-7 passed in 0.02s
+17 passed in 1.10s
 ```
+
+## Interface de demonstração
+
+Para abrir uma tela local com o botão **Confirmar doação**, execute:
+
+```bash
+python -m app.web
+```
+
+Depois, acesse `http://localhost:8000` no navegador. A página inicial oferece
+os botões **Criar doação** e **Ver doações**. A criação recebe nome, e-mail,
+ONG e valor; depois, a listagem permite confirmar cada doação. O botão
+**Confirmar doação** chama `confirmar_doacao` e altera o estado para
+`CONFIRMADA`. Os dados permanecem somente em memória enquanto o servidor está
+em execução.
 
 ## Como executar com Docker
 
@@ -99,6 +115,8 @@ está em [`docs/especificacao-sdd.md`](docs/especificacao-sdd.md).
 
 ## Limitações atuais (escopo futuro)
 
-Interface gráfica, API HTTP, banco de dados, autenticação, notificações e
-pagamento real ainda não foram implementados. Essas frentes estão descritas
-no `Backlog do Produto - DoaFácil` e serão endereçadas em sprints futuras.
+A interface web disponível é apenas uma demonstração local, em memória e
+sem framework. Ainda não foram implementados uma API HTTP para integrações,
+banco de dados, autenticação, notificações ou pagamento real. Essas frentes
+estão descritas no `Backlog do Produto - DoaFácil` e serão endereçadas em
+sprints futuras.
