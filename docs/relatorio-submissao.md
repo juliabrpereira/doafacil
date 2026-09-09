@@ -10,7 +10,8 @@
 |---|---|
 | Victor Hugo Américo dos Santos Garajau | 22503417 |
 | Nelson Ribeiro Felix | 22452653 |
-| Júlia Barrozo Rodrigues Pereira | 22452137
+| Júlia Barrozo Rodrigues Pereira | 22452137 |
+| Ana Cecília Batista Sirino | 22505788 |
 
 ## 2. Link do repositório
 
