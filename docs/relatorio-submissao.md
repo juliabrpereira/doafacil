@@ -133,3 +133,12 @@ localmente e mantida apenas em memória. Ainda não há uma API HTTP para
 integrações, banco de dados, autenticação, notificações ou pagamento real.
 Essas limitações são intencionais nesta entrega e estão documentadas como
 escopo futuro no `Backlog do Produto - DoaFácil`.
+
+## Relato de Experiência
+O desenvolvimento do projeto Doa Fácil proporcionou aprendizados importantes sobre desenvolvimento de software em equipe. Durante a execução das etapas, tivemos contato com a organização do repositório no GitHub, utilização de branches, Pull Requests, testes automatizados e documentação das decisões técnicas.
+
+Um dos principais desafios foi manter o projeto organizado e garantir que as alterações realizadas por diferentes integrantes fossem integradas corretamente. A execução frequente dos testes automatizados também foi importante para verificar se as funcionalidades continuavam funcionando após as alterações.
+
+Outro aprendizado foi o uso de ferramentas de Inteligência Artificial como apoio ao desenvolvimento. As sugestões da IA foram utilizadas como auxílio, mas as decisões e validações foram realizadas pela equipe, principalmente por meio da análise do código, dos testes e da especificação do projeto.
+
+Ao final, o grupo conseguiu compreender melhor a importância da comunicação técnica, da documentação e da revisão das alterações durante o desenvolvimento de um projeto de software.
