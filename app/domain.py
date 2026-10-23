@@ -56,9 +56,13 @@ def criar_doacao(nome_doador, email_doador, ong, valor):
         raise DomainError("ONG inválida.")
     if not ong.ativa:
         raise DomainError("ONG inativa não pode receber doações.")
-
+    if not (ong.nome or "").strip():
+        raise DomainError("Nome da ONG deve ser informado.")
     try:
-        valor_decimal = Decimal(str(valor)).quantize(Decimal("0.01"))
+        valor_decimal = Decimal(str(valor))
+        if not valor_decimal.is_finite():
+            raise InvalidOperation("valor não finito")
+        valor_decimal = valor_decimal.quantize(Decimal("0.01"))
     except (InvalidOperation, ValueError, TypeError) as exc:
         raise DomainError("Valor da doação deve ser um número válido.") from exc
 

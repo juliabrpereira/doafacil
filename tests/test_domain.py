@@ -74,3 +74,37 @@ def test_confirmar_doacao_rejeita_confirmacao_duplicada():
 
     with pytest.raises(DomainError, match="já está confirmada"):
         confirmar_doacao(doacao)
+
+@pytest.mark.parametrize("valor", ["NaN", "sNaN", "Infinity", "-Infinity"])
+def test_criar_doacao_rejeita_valor_nao_finito(valor):
+    ong = ONG(nome="Instituto Esperança")
+
+    with pytest.raises(DomainError, match="número válido"):
+        criar_doacao("Ana Silva", "ana@example.com", ong, valor)
+
+
+@pytest.mark.parametrize("valor", ["abc", "1,50", None])
+def test_criar_doacao_rejeita_valor_nao_numerico(valor):
+    ong = ONG(nome="Instituto Esperança")
+
+    with pytest.raises(DomainError, match="número válido"):
+        criar_doacao("Ana Silva", "ana@example.com", ong, valor)
+
+
+def test_criar_doacao_aceita_menor_valor_positivo_e_rejeita_abaixo_dele():
+    ong = ONG(nome="Instituto Esperança")
+
+    assert criar_doacao("Ana Silva", "ana@example.com", ong, "0.01").valor == Decimal("0.01")
+    with pytest.raises(DomainError, match="maior que zero"):
+        criar_doacao("Ana Silva", "ana@example.com", ong, "0.004")
+
+
+@pytest.mark.parametrize("nome_ong", ["", "   "])
+def test_criar_doacao_rejeita_ong_sem_nome(nome_ong):
+    with pytest.raises(DomainError, match="Nome da ONG"):
+        criar_doacao("Ana Silva", "ana@example.com", ONG(nome=nome_ong), 25)
+
+
+def test_criar_doacao_rejeita_ong_que_nao_e_ong():
+    with pytest.raises(DomainError, match="ONG inválida"):
+        criar_doacao("Ana Silva", "ana@example.com", "Instituto Esperança", 25)
