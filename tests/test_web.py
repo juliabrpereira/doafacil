@@ -16,7 +16,7 @@ from app.web import (
 
 @pytest.fixture
 def servidor_web():
-    DoaFacilHandler.doacao = criar_doacao_demo()
+    DoaFacilHandler.doacao = [criar_doacao_demo()]
     servidor = HTTPServer(("127.0.0.1", 0), DoaFacilHandler)
     thread = Thread(target=servidor.serve_forever, daemon=True)
     thread.start()
@@ -123,3 +123,65 @@ def test_pagina_informa_confirmacao_sem_exibir_botao():
 
     assert "Doação confirmada." in pagina
     assert "Confirmar doação</button>" not in pagina
+
+def _post(porta, caminho, campos=None):
+    conexao = HTTPConnection("127.0.0.1", porta)
+    conexao.request(
+        "POST",
+        caminho,
+        body=urlencode(campos or {}),
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+    )
+    resposta = conexao.getresponse()
+    return resposta.status, resposta.read().decode("utf-8")
+
+
+CAMPOS_VALIDOS = {
+    "nome_doador": "Ana Silva",
+    "email_doador": "ana@example.com",
+    "ong": "Instituto Esperança",
+    "valor": "25",
+}
+
+
+def test_formulario_informa_erro_para_valor_nao_finito(servidor_web):
+    status, pagina = _post(servidor_web, "/criar", {**CAMPOS_VALIDOS, "valor": "NaN"})
+
+    assert status == 400
+    assert "Valor da doação deve ser um número válido." in pagina
+
+
+def test_formulario_rejeita_ong_em_branco(servidor_web):
+    status, pagina = _post(servidor_web, "/criar", {**CAMPOS_VALIDOS, "ong": "   "})
+
+    assert status == 400
+    assert "Nome da ONG deve ser informado." in pagina
+
+
+def test_servidor_comeca_cada_teste_com_apenas_a_doacao_de_demonstracao(servidor_web):
+    assert len(DoaFacilHandler.doacoes) == 1
+    _post(servidor_web, "/criar", CAMPOS_VALIDOS)
+    assert len(DoaFacilHandler.doacoes) == 2
+
+
+def test_confirmar_pela_interface_altera_estado_e_bloqueia_duplicidade(servidor_web):
+    status, _ = _post(servidor_web, "/confirmar/0")
+    assert status == 303
+    assert DoaFacilHandler.doacoes[0].estado is EstadoDoacao.CONFIRMADA
+
+    status, pagina = _post(servidor_web, "/confirmar/0")
+    assert status == 400
+    assert "Doação já está confirmada." in pagina
+
+
+def test_confirmar_doacao_inexistente_retorna_404(servidor_web):
+    status, _ = _post(servidor_web, "/confirmar/99")
+
+    assert status == 404
+
+
+def test_rota_desconhecida_retorna_404(servidor_web):
+    conexao = HTTPConnection("127.0.0.1", servidor_web)
+    conexao.request("GET", "/nao-existe")
+
+    assert conexao.getresponse().status == 404
