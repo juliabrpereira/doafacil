@@ -2,6 +2,13 @@
 ## Entrega 1 — Ambiente, Especificação Técnica e Test Harness
 ### Bootcamp III — Desenvolvimento Iterativo, Colaboração com IA e Validação Automatizada
 
+> **Documento histórico.** Este é o relatório da Entrega 1, mantido sem
+> alterações de conteúdo. O estado atual do projeto (Entrega 2) está no
+> [`README.md`](../README.md), na especificação refinada
+> ([`especificacao-sdd.md`](especificacao-sdd.md), seção 8), no registro de
+> erros ([`ERROS.md`](ERROS.md)) e nos ADRs em [`adr/`](../adr/). O relatório
+> da Entrega 2 foi entregue em PDF.
+
 ---
 
 ## 1. Identificação da equipe
@@ -15,7 +22,7 @@
 
 ## 2. Link do repositório
 
-https://github.com/juliabrpereira/doa-facil
+https://github.com/juliabrpereira/doafacil
 
 
 ## 3. Resumo do projeto
@@ -108,13 +115,6 @@ borda:
 | Confirmação duplicada | Operação rejeitada (`DomainError`) |
 | Criação pela interface web | Doação criada e exibida como `PENDENTE` |
 | Navegação da interface web | Landing page direciona para criação e listagem |
-
-### Log da execução local (`pytest -q`)
-
-```text
-.................                                                        [100%]
-17 passed in 1.10s
-```
 
 
 ## 8. Governança do repositório

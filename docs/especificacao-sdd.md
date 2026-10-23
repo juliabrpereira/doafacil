@@ -8,7 +8,7 @@ canal simples para conectar quem doa a quem precisa. O processo hoje é
 informal, disperso em grupos de WhatsApp ou redes sociais, o que gera
 desperdício de itens e perda de tempo de ambos os lados.
 
-## 2. Objetivo da sprint (Entrega 1)
+## 2. Objetivo da sprint (Entrega 1) e refinamento (Entrega 2)
 
 Validar as regras centrais do domínio de doações — criação e confirmação —
 de forma independente de persistência ou integrações externas. O critério de
@@ -17,6 +17,9 @@ corretamente as regras de negócio descritas abaixo. O repositório também
 inclui uma interface web mínima, em memória e sem framework, para demonstrar
 localmente a criação e a confirmação de uma doação; ela não faz parte do
 núcleo de domínio.
+
+Na Entrega 2, a especificação foi refinada a partir dos erros lógicos
+registrados em [`docs/ERROS.md`](ERROS.md). As mudanças estão na seção 8.
 
 ## 3. Requisitos Funcionais (RF)
 
@@ -27,6 +30,8 @@ núcleo de domínio.
 | RF03 | O sistema deve impedir doações para ONGs inativas. |
 | RF04 | O sistema deve permitir confirmar uma doação pendente. |
 | RF05 | O sistema deve impedir a confirmação duplicada de uma doação. |
+| RF06 | A interface web deve permitir criar uma doação por formulário e exibir o erro de domínio quando um dado for inválido. |
+| RF07 | A interface web deve listar as doações em memória e permitir confirmar cada doação pendente. |
 
 ## 4. Requisitos Não Funcionais (RNF)
 
@@ -35,7 +40,7 @@ núcleo de domínio.
 | RNF01 | O domínio não deve depender de banco de dados, web framework ou gateway de pagamento. |
 | RNF02 | Valores monetários devem ser representados com `Decimal`, nunca `float`. |
 | RNF03 | O núcleo de domínio deve ser executável e testável em menos de 1 segundo. |
-| RNF04 | O código deve ser 100% coberto por testes automatizados nesta entrega. |
+| RNF04 | O núcleo de domínio (`app/domain.py`) deve ter 100% de cobertura por testes automatizados. A interface de demonstração (`app/web.py`) tem a cobertura medida e registrada, sem meta de 100%. |
 
 ## 5. Regras de negócio
 
@@ -54,6 +59,10 @@ núcleo de domínio.
   para `CONFIRMADA`.
 - **RN09** — Uma doação `CONFIRMADA` não pode ser confirmada novamente; a
   tentativa deve levantar um erro de domínio (`DomainError`).
+- **RN10** — A ONG de destino deve ter nome informado (não vazio após remoção
+  de espaços).
+- **RN11** — O valor deve ser um número finito. `NaN`, `Infinity` e textos não
+  numéricos são rejeitados com `DomainError`.
 
 ## 6. Contratos de entrada e saída
 
@@ -61,17 +70,19 @@ núcleo de domínio.
 
 **Entrada**
 ```
-nome_doador: str   # obrigatório, não vazio
-email_doador: str  # obrigatório, formato mínimo válido
-ong: ONG            # deve estar ativa
-valor: int | float | str | Decimal  # deve ser > 0
+nome_doador: str   # obrigatório, não vazio (RN01)
+email_doador: str  # obrigatório, formato mínimo válido (RN02)
+ong: ONG            # deve estar ativa (RN03) e ter nome não vazio (RN10)
+valor: int | float | str | Decimal  # número finito (RN11) e > 0 (RN04)
 ```
 
 **Saída (sucesso)**: objeto `Doacao` com `estado = PENDENTE`, `email_doador`
 normalizado e `valor` como `Decimal` com duas casas.
 
 **Saída (erro)**: `DomainError` com mensagem descritiva, quando qualquer
-regra de RN01 a RN04 for violada.
+regra de RN01 a RN04, RN10 ou RN11 for violada, ou quando `ong` não for uma
+instância de `ONG`. Para entradas dos tipos declarados acima, nenhuma outra
+exceção escapa de `criar_doacao`.
 
 ### 6.2 `confirmar_doacao(doacao) -> Doacao`
 
@@ -96,8 +107,12 @@ alterar as regras de negócio já validadas.
 
 ## 8. Histórico de refinamentos
 
-| Data | Alteração | Motivo |
-|---|---|---|
-| Sprint 1 | Definição inicial das regras RN01–RN09 | Escopo mínimo necessário para o MVP de domínio |
-| Sprint 1 | Inclusão da normalização de e-mail (minúsculas, trim) | Evitar duplicidade de cadastro por variação de digitação, identificada ao escrever os testes de borda |
-| Sprint 1 | Uso obrigatório de `Decimal` em vez de `float` para valores | Ponto flutuante binário pode gerar erros de arredondamento em valores monetários |
+| Sprint | Alteração | Motivo | Referência |
+|---|---|---|---|
+| Sprint 1 | Definição inicial das regras RN01–RN09 | Escopo mínimo necessário para o MVP de domínio | — |
+| Sprint 1 | Inclusão da normalização de e-mail (minúsculas, trim) | Evitar duplicidade de cadastro por variação de digitação, identificada ao escrever os testes de borda | — |
+| Sprint 1 | Uso obrigatório de `Decimal` em vez de `float` para valores | Ponto flutuante binário pode gerar erros de arredondamento em valores monetários | — |
+| Sprint 2 | RN10 — ONG precisa ter nome informado | A SPEC só exigia `ativa = True`, e a implementação aceitava ONG com nome vazio (omissão da SPEC) | [Erro E-02](ERROS.md#e-02--ong-com-nome-vazio-era-aceita), PR #38 |
+| Sprint 2 | RN11 — valor deve ser número finito (e reforço do contrato 6.1) | `NaN` escapava como `decimal.InvalidOperation` e derrubava a requisição web; a SPEC não definia "número válido" | [Erro E-01](ERROS.md#e-01--valor-nan-escapava-como-exceção-não-tratada), PR #38 |
+| Sprint 2 | RF06 e RF07 — requisitos da interface web | A interface existia no código e nos testes, mas nenhum requisito a descrevia; os fluxos sem teste apareceram na medição de cobertura | Relacionado ao [Erro E-04](ERROS.md#e-04--cobertura-real-divergia-da-spec-rnf04), PR #38 |
+| Sprint 2 | RNF04 — 100% de cobertura apenas para `app/domain.py` | A cobertura medida era 76% no total; a meta de 100% para todo o código não era verdadeira | [Erro E-04](ERROS.md#e-04--cobertura-real-divergia-da-spec-rnf04), PR #38 |
