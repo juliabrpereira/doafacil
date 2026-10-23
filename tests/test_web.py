@@ -16,7 +16,7 @@ from app.web import (
 
 @pytest.fixture
 def servidor_web():
-    DoaFacilHandler.doacao = [criar_doacao_demo()]
+    DoaFacilHandler.doacoes = [criar_doacao_demo()]
     servidor = HTTPServer(("127.0.0.1", 0), DoaFacilHandler)
     thread = Thread(target=servidor.serve_forever, daemon=True)
     thread.start()
