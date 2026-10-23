@@ -2,7 +2,7 @@
 
 Gerenciador de doações que intermedeia doadores individuais e ONGs,
 reduzindo o desperdício de itens doáveis. Este repositório contém a
-versão final do Bootcamp III (**Entrega 2**): núcleo de domínio, interface
+versão intermediária do Bootcamp III (**Entrega 2**): núcleo de domínio, interface
 web de demonstração, especificação técnica orientada a SDD, harness de testes,
 registro de erros lógicos e decisões arquiteturais.
 
@@ -185,7 +185,6 @@ sequenceDiagram
 - Testes: `python -m pytest -q` (34 testes).
 - Cobertura: `python -m pytest --cov=app --cov-report=term-missing` (usa o
   `pytest-cov`, incluído no `requirements.txt`).
-- Log do ambiente padronizado: [`logs_testes_final.txt`](logs_testes_final.txt).
 - Erros lógicos e correções: [`docs/ERROS.md`](docs/ERROS.md).
 - Refinamentos da especificação: seção 8 de [`docs/especificacao-sdd.md`](docs/especificacao-sdd.md).
 - Decisões: ADR-001 a ADR-004 em [`adr/`](adr/).
