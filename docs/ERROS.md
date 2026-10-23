@@ -1,80 +1,105 @@
 # Registro de Erros Lógicos — DOA FÁCIL
 
-> **Como usar este arquivo.** Cada entrada abaixo parte de um teste, commit ou PR **reais** do repositório
-> (https://github.com/juliabpreira/doafacil). A parte "Detecção" já está ancorada em evidência.
-> Os campos marcados **[CONFIRMAR]** devem ser verificados por quem implementou, olhando o histórico
-> (`git log -p`, aba *Commits* do PR, aba *Files changed*). **Mantenha apenas o que de fato aconteceu;**
-> apague ou reescreva qualquer entrada que a equipe não consiga comprovar.
-> Dica: `git log --oneline --all -- tests/` e `git show <hash>` mostram em qual commit cada teste nasceu e se algo foi ajustado depois.
+Um erro lógico é o que executa sem falhar na compilação, mas faz a coisa errada.
+Cada entrada segue: o quê (título), detecção, causa, classificação (implementação,
+especificação ou processo), correção e prevenção. Cada entrada termina com a
+**referência cruzada** para a issue, o PR e a linha correspondente da SPEC §8.
 
-Critério de classificação (apostila, §4.2): *"um programador perfeito, lendo só a SPEC, teria escrito o código certo?"*
-Se **sim** → erro de implementação (só aqui). Se **não** → defeito de especificação (aqui **e** no SPEC §8).
+**Origem das entradas.** Os erros E-01 a E-04 foram encontrados em uma auditoria
+da branch `feature/interface-criacao-landing` (commit `55e65f5`), feita com apoio
+de IA (Claude) a partir da leitura do código e de testes exploratórios. Eles
+**não** foram detectados pelo harness original (que passava 17/17). Cada correção
+de E-01 e E-02 tem teste novo que **falha no código antigo e passa no novo**
+(evidência na seção "Prova vermelho → verde"). O E-03 foi encontrado por revisão
+de código, e o E-04 pela medição de cobertura. As correções entraram na `develop`
+pelo [PR #38](https://github.com/juliabrpereira/doafacil/pull/38) (merge
+`c61fc47`). O E-05 foi identificado pela equipe durante a sprint.
 
----
+## E-01 · Valor `NaN` escapava como exceção não tratada
+- Detecção: teste exploratório `criar_doacao(..., valor="NaN")` levantou
+  `decimal.InvalidOperation` em vez de `DomainError`. Pela interface,
+  `POST /criar` com `valor=NaN` encerrou a conexão sem resposta HTTP.
+- Causa: `Decimal("NaN").quantize(...)` não falha, e a falha só ocorre na
+  comparação `valor_decimal <= 0` (`app/domain.py`), fora do `try/except`.
+- Classificação: implementação **e** especificação. O contrato (SPEC §6.1)
+  promete `DomainError` para entrada inválida, mas a SPEC não definia "número
+  válido".
+- Correção: verificar `is_finite()` dentro do `try` antes de quantizar.
+- Prevenção: testes `test_criar_doacao_rejeita_valor_nao_finito` (NaN, sNaN,
+  ±Infinity) e `test_formulario_informa_erro_para_valor_nao_finito`.
+- Referências: Issue [#26](https://github.com/juliabrpereira/doafacil/issues/26)
+  · PR [#38](https://github.com/juliabrpereira/doafacil/pull/38)
+  · SPEC §8, linha "RN11 — valor deve ser número finito".
 
-## E-01 · Confirmação duplicada de uma doação
+## E-02 · ONG com nome vazio era aceita
+- Detecção: `criar_doacao("A", "a@b.co", ONG(""), 5)` retornou doação
+  `PENDENTE`; pela interface, `ong="   "` retornou 303 (criada).
+- Causa: a SPEC só exigia `ONG.ativa = True` (RN03). Nenhum teste ou regra
+  tratava o nome. A implementação seguiu a SPEC ao pé da letra.
+- Classificação: **defeito de especificação** (um programador perfeito lendo só
+  a SPEC teria produzido o mesmo código).
+- Correção: nova regra RN10 na SPEC e validação em `criar_doacao`.
+- Prevenção: `test_criar_doacao_rejeita_ong_sem_nome` e
+  `test_formulario_rejeita_ong_em_branco`.
+- Referências: Issue [#27](https://github.com/juliabrpereira/doafacil/issues/27)
+  · PR [#38](https://github.com/juliabrpereira/doafacil/pull/38)
+  · SPEC §8, linha "RN10 — ONG precisa ter nome informado".
 
-- **Detecção:** harness — `tests/test_domain.py::test_confirmar_doacao_rejeita_confirmacao_duplicada`. Regra implementada na issue #3, commit `07bdcee` ("implementa regra de confirmação de doação"), branch `feature/regra-confirmacao-de-doacao`.
-- **O quê:** uma doação já `CONFIRMADA` poderia ser confirmada novamente, repetindo a transição `PENDENTE → CONFIRMADA`.
-- **Causa:** **[CONFIRMAR]** — a primeira versão de `confirmar_doacao` verificava o estado antes de alterar? Se o teste nasceu junto com a regra, registrar como "erro prevenido por teste de borda", não como falha ocorrida.
-- **Correção:** **[CONFIRMAR]** commit/PR (candidatos: `07bdcee`, PR #15 ou #16).
-- **Prevenção:** todo fluxo de estados tem teste para a transição inválida, não só para a válida.
-- **Classificação:** **[CONFIRMAR]** implementação ou especificação (a SPEC dizia o que acontece na segunda confirmação?).
+## E-03 · Fixture de teste configurava atributo inexistente (isolamento falso)
+- Detecção: **revisão de código, sem teste cobrindo**. A fixture `servidor_web`
+  atribuía `DoaFacilHandler.doacao`, mas o handler usa a lista `doacoes`.
+- Causa: o atributo foi renomeado de `doacao` para `doacoes` (commit `55e65f5`)
+  e a fixture ficou para trás. A atribuição não falha, só cria um atributo novo.
+  A lista `doacoes` (atributo de classe) passou a vazar entre testes: uma
+  doação criada num teste continuava existindo no seguinte.
+- Classificação: implementação (qualidade do teste).
+- Correção: a fixture passou a reiniciar `DoaFacilHandler.doacoes`.
+- Prevenção: `test_servidor_comeca_cada_teste_com_apenas_a_doacao_de_demonstracao`.
+- Lição: os 17 testes passavam por sorte de ordem, não por isolamento. Este é o
+  caso "erro que só a revisão humana pegou" usado no Pilar 4 do relatório.
+- Referências: Issue [#28](https://github.com/juliabrpereira/doafacil/issues/28)
+  · PR [#38](https://github.com/juliabrpereira/doafacil/pull/38)
+  · SPEC: sem linha própria (defeito do teste, não de regra de negócio).
 
-## E-02 · Valor da doação: zero e negativo
+## E-04 · Cobertura real divergia da SPEC (RNF04)
+- Detecção: `pytest --cov=app` mostrou 76% no total (`domain.py` 93%,
+  `web.py` 67%), contra "100% coberto" na SPEC.
+- Causa: ramos sem teste: no domínio, ONG que não é `ONG` e valor não numérico;
+  na interface, todo o fluxo `POST /confirmar/<n>` e as rotas 404.
+- Classificação: especificação/processo (afirmação não verificada).
+- Correção: testes novos; RNF04 reescrito: 100% para `app/domain.py`, medido
+  para `app/web.py`. Resultado: `domain.py` 100%, `web.py` 86%, total 91%.
+- Prevenção: rodar `pytest --cov=app --cov-report=term-missing` e colar o
+  resumo no PR.
+- Referências: Issue [#28](https://github.com/juliabrpereira/doafacil/issues/28)
+  · PR [#38](https://github.com/juliabrpereira/doafacil/pull/38)
+  · SPEC §8, linha "RNF04 — 100% de cobertura apenas para `app/domain.py`".
 
-- **Detecção:** harness — `test_criar_doacao_rejeita_dados_invalidos` parametrizado, com casos `0` e `-5` ("maior que zero") visíveis na Figura 9. Regra de criação: issue #2, commit `21e2928`.
-- **O quê:** a regra de criação precisa rejeitar valores `<= 0`. A fronteira é o ponto clássico de erro (`>` vs `>=`).
-- **Causa:** **[CONFIRMAR]** houve operador de comparação errado (`>= 0` aceitaria zero)? Se sim, em qual commit?
-- **Correção:** **[CONFIRMAR]** commit/PR (candidato: PR #13, de NelsonRibeiroFelix).
-- **Prevenção:** um teste por fronteira numérica (0 e -5 já cobrem a borda e o caso interno).
-- **Classificação:** **[CONFIRMAR]**.
+## E-05 · Evidência de testes fora do ambiente padronizado
+- Detecção: os prints da Entrega 2 mostram pytest 9.1.1 e Python 3.12.4, mas
+  `requirements.txt` fixa pytest 8.3.3 e o Dockerfile e o CI usam Python 3.11.
+- Causa: execução em ambiente local sem o ambiente padronizado.
+- Classificação: processo.
+- Correção: gerar o log final com `docker run --rm doa-facil` (ver
+  `logs_testes_final.txt`).
+- Prevenção: o template de PR pede o resumo do `pytest` no ambiente padronizado.
+- Referências: PR [#41] (`chore/log-testes-final`, Fase 6)
+  · SPEC: sem linha própria (erro de processo).
 
-## E-03 · Dados de entrada não normalizados (espaços em branco)
+## Prova vermelho → verde (E-01 e E-02)
 
-- **Detecção:** harness — `test_doacao_e_criada_com_dados_normalizados` e os casos parametrizados com nome em branco e e-mail com espaços/inválido (Figura 9).
-- **O quê:** nome ou e-mail com espaços nas pontas, ou só espaços, precisam ser tratados (normalizados ou rejeitados).
-- **Causa:** **[CONFIRMAR]** a validação aceitava string vazia/espaços antes do ajuste?
-- **Correção:** **[CONFIRMAR]** commit/PR (candidatos: PR #13, #14).
-- **Prevenção:** casos de borda de texto (vazio, só espaços, espaços nas pontas) obrigatórios para todo campo de entrada.
-- **Classificação:** **[CONFIRMAR]**.
+**Detecção:** o harness original passava (17 passed), mas os testes
+exploratórios reproduziam E-01 (`NaN` levanta `InvalidOperation`) e E-02
+(ONG com nome vazio é aceita).
 
-## E-04 · Doação aceita para ONG inativa
+![17 passed e reprodução de E-01 e E-02](img/deteccao-e01-e02.png)
 
-- **Detecção:** harness — `test_criar_doacao_rejeita_ong_inativa`; contrapartida `test_ong_pode_ser_criada_inativa`. Entidades: issue #1, commit `355d577`; regra: issue #2, commit `21e2928`.
-- **O quê:** garantir que uma ONG inativa não receba doações (regra de negócio entre duas entidades).
-- **Causa:** **[CONFIRMAR]** a regra de criação checava `ong.ativa`? Foi esquecida em alguma versão?
-- **Correção:** **[CONFIRMAR]**.
-- **Prevenção:** teste que verifica o **efeito** (a doação não é criada), não só a mensagem de erro.
-- **Classificação:** **[CONFIRMAR]**.
+**Vermelho:** testes novos (commit `abdf3d9`) executados contra o
+`app/domain.py` antigo, no worktree da branch `exp/base`.
 
-## E-05 · Interface exibia botão de confirmação no estado errado
+![5 failed, 29 passed](img/testes-vermelhos.png)
 
-- **Detecção:** harness — `test_web.py::test_pagina_exibe_botao_para_doacao_pendente` e `test_pagina_informa_confirmacao_sem_exibir_botao` (Figura 9). Interface de confirmação: issue #17, PR #16 (VictorS4-byte).
-- **O quê:** o botão "Confirmar" só deve aparecer para doações `PENDENTE`; para `CONFIRMADA` deve mostrar a informação, sem botão.
-- **Causa:** **[CONFIRMAR]** houve versão em que o botão aparecia nos dois estados?
-- **Correção:** **[CONFIRMAR]** commit dentro do PR #16.
-- **Prevenção:** teste de interface para **cada** estado do fluxo `PENDENTE → CONFIRMADA`.
-- **Classificação:** **[CONFIRMAR]**.
+**Verde:** os mesmos testes com a correção do PR #38, com a cobertura usada
+no E-04 (`domain.py` 100%, `web.py` 86%, total 91%).
 
----
-
-## Erro detectado por revisão humana (campo recomendado pela apostila)
-
-A apostila pede, se houver, ao menos um erro **pego por humano onde não havia teste**. Procurem nos comentários dos PRs
-(#13, #15, #16, #21, #22, #24, #25) por qualquer apontamento de revisor que mudou o código.
-
-- **PR / revisor:** **[PREENCHER]**
-- **O que o revisor percebeu:** **[PREENCHER]**
-- **Por que nenhum teste pegou:** **[PREENCHER]**
-- **Teste criado depois:** **[PREENCHER]**
-
-> Se **nenhum** erro puder ser comprovado, escreva isto no relatório em vez de forçar entradas:
-> *"Durante a Entrega 2 não identificamos erros lógicos comprovados por registro; as entradas acima
-> documentam os pontos de risco cobertos pelo harness e o que verificamos no histórico."*
-> Isso é honesto e é melhor que inventar.
-
-## Evidência final
-
-- Execução: `docker compose run --rm tests | tee logs_testes_final.txt` → **17 passed** **[REPETIR NO DOCKER]**
-- Arquivo `logs_testes_final.txt` versionado e citado no README.
+![34 passed e cobertura](img/testes-verdes.png)
