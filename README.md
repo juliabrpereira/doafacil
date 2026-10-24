@@ -188,8 +188,7 @@ sequenceDiagram
 ## Qualidade e evidências
 
 - Testes: `python -m pytest -q` (20 testes).
-- Cobertura: `python -m pytest --cov=app --cov-report=term-missing` (usa o
-  `pytest-cov`, incluído no `requirements.txt`).
+- Cobertura local: `app/domain.py` — 100%; `app/web.py` — 67%; total — 78%. Resultados da execução local, não do Docker.
 - Erros lógicos e correções: [`docs/ERROS.md`](docs/ERROS.md).
 - Refinamentos da especificação: seção 8 de [`docs/especificacao-sdd.md`](docs/especificacao-sdd.md).
 - Decisões: ADR-001 a ADR-005 em [`adr/`](adr/).
