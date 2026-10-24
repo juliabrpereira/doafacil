@@ -26,7 +26,11 @@ doafacil/
 │   ├── ERROS.md               # Registro de erros lógicos
 │   └── img/                   # Evidências (prints dos testes)
 ├── adr/
-│   └── ADR-001..004.md        # Decisões arquiteturais
+    ├── ADR-001.md
+    ├── ADR-002.md
+    ├── ADR-003.md
+    ├── ADR-004.md
+    └── ADR-005.md      
 ├── .github/
 │   ├── pull_request_template.md  # Template de PR com critérios de aceitação
 │   └── workflows/tests.yml    # Pipeline de CI (roda pytest a cada push/PR)
@@ -70,7 +74,7 @@ python -m pytest -q
 Resultado esperado:
 
 ```text
-34 passed
+20 passed
 ```
 
 ## Interface de demonstração
@@ -137,6 +141,7 @@ Project.
 - [ADR-002](adr/ADR-002.md) — Interface web mínima sem framework, dados em memória.
 - [ADR-003](adr/ADR-003.md) — Dinheiro com `Decimal`, duas casas e valor finito.
 - [ADR-004](adr/ADR-004.md) — Estado do servidor em atributo de classe.
+- [ADR-005](adr/ADR-005.md) — Critérios de cobertura dos testes automatizados.
 
 ## Especificação técnica
 
@@ -182,12 +187,12 @@ sequenceDiagram
 
 ## Qualidade e evidências
 
-- Testes: `python -m pytest -q` (34 testes).
+- Testes: `python -m pytest -q` (20 testes).
 - Cobertura: `python -m pytest --cov=app --cov-report=term-missing` (usa o
   `pytest-cov`, incluído no `requirements.txt`).
 - Erros lógicos e correções: [`docs/ERROS.md`](docs/ERROS.md).
 - Refinamentos da especificação: seção 8 de [`docs/especificacao-sdd.md`](docs/especificacao-sdd.md).
-- Decisões: ADR-001 a ADR-004 em [`adr/`](adr/).
+- Decisões: ADR-001 a ADR-005 em [`adr/`](adr/).
 
 ## Limitações atuais (escopo futuro)
 
@@ -196,3 +201,7 @@ sem framework. Ainda não foram implementados uma API HTTP para integrações,
 banco de dados, autenticação, notificações ou pagamento real. Essas frentes
 estão descritas no `Backlog do Produto - DoaFácil` e serão endereçadas em
 sprints futuras.
+
+## Variáveis de ambiente
+
+O projeto não exige variáveis de ambiente para sua execução.
