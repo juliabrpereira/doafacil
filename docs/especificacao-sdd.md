@@ -8,7 +8,7 @@ canal simples para conectar quem doa a quem precisa. O processo hoje é
 informal, disperso em grupos de WhatsApp ou redes sociais, o que gera
 desperdício de itens e perda de tempo de ambos os lados.
 
-## 2. Objetivo da sprint (Entrega 1) e refinamento (Entrega 2)
+## 2. Objetivo e evolução do projeto
 
 Validar as regras centrais do domínio de doações — criação e confirmação —
 de forma independente de persistência ou integrações externas. O critério de
@@ -20,6 +20,8 @@ núcleo de domínio.
 
 Na Entrega 2, a especificação foi refinada a partir dos erros lógicos
 registrados em [`docs/ERROS.md`](ERROS.md). As mudanças estão na seção 8.
+
+O objetivo da Entrega 3 é documentar e validar a versão final do DOA FÁCIL (As-Built), incluindo sua arquitetura implementada, regras de negócio, contratos, decisões arquiteturais, limitações conhecidas e evidências disponíveis de testes e cobertura.
 
 ## 3. Requisitos Funcionais (RF)
 
