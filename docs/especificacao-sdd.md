@@ -143,11 +143,17 @@ As funções de apoio `criar_doacao_por_formulario`, `renderizar_landing`, `rend
 **Persistência e limitações:** a lista de doações é mantida em memória na classe `DoaFacilHandler`. Portanto, os registros não constituem armazenamento persistente e são perdidos quando o processo é encerrado. A confirmação utiliza um índice da lista, adequado à demonstração atual, mas sem garantia de identificação persistente do registro. Rotas não reconhecidas retornam HTTP 404.
 
 
-## 10. Decisões arquiteturais
+### 10. Decisões arquiteturais
 
-As decisões técnicas do projeto estão registradas nos documentos ADR localizados no diretório `adr/`.
+As decisões arquiteturais do DOA FÁCIL estão registradas nos documentos ADR (*Architecture Decision Records*) armazenados na pasta `adr/`. Esses registros descrevem as escolhas realizadas pela equipe, suas justificativas, alternativas consideradas e limitações aceitas.
 
-O ADR-004 documenta a utilização de um atributo de classe para manter o estado das doações durante a execução do servidor. O ADR-005 registra o critério de cobertura dos testes automatizados: a meta de 100% aplica-se ao módulo `app/domain.py`, enquanto a cobertura de `app/web.py` deve ser medida e analisada.
+- **ADR-001 — Núcleo de domínio Python independente para o MVP:** define o núcleo de negócio em Python puro, independente de frameworks web, ORMs e serviços de pagamento.
+- **ADR-002 — Interface web mínima sem framework, dados em memória:** estabelece uma interface demonstrativa com a biblioteca padrão do Python, sem framework web e sem persistência em banco de dados.
+- **ADR-003 — Dinheiro com `Decimal`, duas casas e valor finito:** define a representação dos valores monetários com `Decimal`, validação de números finitos e arredondamento para duas casas decimais.
+- **ADR-004 — Estado do servidor em atributo de classe:** estabelece o armazenamento temporário da lista de doações no atributo de classe `DoaFacilHandler.doacoes`, compartilhado durante a execução do processo.
+- **ADR-005 — Critério de cobertura dos testes automatizados:** estabelece a meta de 100% de cobertura para `app/domain.py` e o acompanhamento e a análise da cobertura de `app/web.py`, sem exigir 100% nesse módulo.
+
+Essas decisões orientam a implementação atual e também registram limitações conhecidas, como ausência de persistência, autenticação e processamento real de pagamentos. Os ADRs devem ser consultados quando houver alterações arquiteturais ou ampliação do escopo do projeto.
 
 ## 11. Diferenças e refinamentos da implementação
 
