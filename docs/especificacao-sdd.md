@@ -122,6 +122,26 @@ alterar as regras de negócio já validadas.
 A aplicação está organizada em duas partes principais. O módulo `app/domain.py` concentra as regras de negócio, incluindo validações, criação e confirmação de doações. O módulo `app/web.py` disponibiliza uma interface web simples para interação com essas funcionalidades.
 
 Os testes automatizados estão organizados no diretório `tests/` e utilizam `pytest`. A ferramenta `pytest-cov` é utilizada para medir a cobertura do código. Os dados das doações permanecem em memória durante a execução do servidor, sem persistência em banco de dados.
+### 9.1 Rotas e contratos da interface web
+
+A interface web é implementada em `app/web.py`, utilizando `HTTPServer` e `BaseHTTPRequestHandler`, da biblioteca padrão do Python. As operações de negócio são delegadas às funções do módulo `app/domain.py`.
+
+| Método HTTP | Rota | Comportamento |
+|---|---|---|
+| GET | `/` | Exibe a página inicial com atalhos para criar e consultar doações. |
+| GET | `/criar` | Exibe o formulário de criação de doação. |
+| POST | `/criar` | Recebe os dados do formulário, chama `criar_doacao_por_formulario` e, se a operação for bem-sucedida, redireciona para `/doacoes` com status HTTP 303. Se ocorrer um `DomainError`, exibe a mensagem de erro e retorna HTTP 400. |
+| GET | `/doacoes` | Lista as doações mantidas em memória e permite confirmar aquelas que ainda estão pendentes. |
+| POST | `/confirmar/{indice}` | Localiza a doação pelo índice da lista e chama `confirmar_doacao`. Em caso de sucesso, redireciona para `/doacoes` com status HTTP 303. Se houver um erro de domínio, retorna HTTP 400; índices inválidos ou inexistentes resultam em HTTP 404. |
+
+As funções de apoio `criar_doacao_por_formulario`, `renderizar_landing`, `renderizar_formulario`, `renderizar_doacoes` e `renderizar_pagina` organizam o processamento dos dados e a apresentação das páginas.
+
+**Contrato de criação:** a rota `POST /criar` recebe nome do doador, e-mail, nome da ONG e valor da doação. Os dados são encaminhados à função `criar_doacao`, que aplica as validações do domínio. Uma operação válida adiciona a doação à lista em memória; uma operação inválida que gere `DomainError` retorna uma mensagem de erro.
+
+**Contrato de confirmação:** a rota `POST /confirmar/{indice}` recebe o índice da doação na lista em memória e chama `confirmar_doacao`. A regra de negócio permite confirmar uma doação pendente e rejeita uma segunda confirmação por meio de `DomainError`.
+
+**Persistência e limitações:** a lista de doações é mantida em memória na classe `DoaFacilHandler`. Portanto, os registros não constituem armazenamento persistente e são perdidos quando o processo é encerrado. A confirmação utiliza um índice da lista, adequado à demonstração atual, mas sem garantia de identificação persistente do registro. Rotas não reconhecidas retornam HTTP 404.
+
 
 ## 10. Decisões arquiteturais
 
