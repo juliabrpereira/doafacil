@@ -68,23 +68,21 @@ O objetivo da Entrega 3 é documentar e validar a versão final do DOA FÁCIL (A
 
 ## 6. Contratos de entrada e saída
 
-### 6.1 `criar_doacao(nome_doador, email_doador, ong, valor) -> Doacao`
+### 6.1 Contrato: `criar_doacao(nome_doador, email_doador, ong, valor)`
 
-**Entrada**
-```
-nome_doador: str   # obrigatório, não vazio (RN01)
-email_doador: str  # obrigatório, formato mínimo válido (RN02)
-ong: ONG            # deve estar ativa (RN03) e ter nome não vazio (RN10)
-valor: int | float | str | Decimal  # número finito (RN11) e > 0 (RN04)
-```
+**Objetivo:** criar uma doação com estado inicial `PENDENTE`, após validar os dados de entrada.
 
-**Saída (sucesso)**: objeto `Doacao` com `estado = PENDENTE`, `email_doador`
-normalizado e `valor` como `Decimal` com duas casas.
+**Parâmetros:**
+- `nome_doador`: nome do doador. Espaços no início e no final são removidos; o campo não pode ficar vazio.
+- `email_doador`: e-mail do doador. Espaços externos são removidos, o endereço é convertido para letras minúsculas e deve corresponder ao padrão de validação definido no código.
+- `ong`: deve ser uma instância de `ONG`, estar ativa e possuir nome não vazio.
+- `valor`: valor conversível para `Decimal`, finito e maior que zero. O valor é arredondado para duas casas decimais por `quantize(Decimal("0.01"))`.
 
-**Saída (erro)**: `DomainError` com mensagem descritiva, quando qualquer
-regra de RN01 a RN04, RN10 ou RN11 for violada, ou quando `ong` não for uma
-instância de `ONG`. Para entradas dos tipos declarados acima, nenhuma outra
-exceção escapa de `criar_doacao`.
+**Retorno:** uma instância de `Doacao`, com os dados validados, o valor em `Decimal` e o estado inicial `EstadoDoacao.PENDENTE`.
+
+**Erros:** lança `DomainError` quando o nome do doador está vazio, o e-mail é inválido, a ONG não é válida, está inativa ou não possui nome, ou o valor não é válido ou é menor ou igual a zero. Erros de conversão do valor tratados pelo código são convertidos em `DomainError`.
+
+**Observação:** a conversão e o arredondamento monetário seguem o comportamento de `Decimal` e `quantize` do Python. O código não define explicitamente um modo de arredondamento, portanto utiliza o padrão do contexto decimal.
 
 ### 6.2 `confirmar_doacao(doacao) -> Doacao`
 
