@@ -155,20 +155,30 @@ As decisões arquiteturais do DOA FÁCIL estão registradas nos documentos ADR (
 
 Essas decisões orientam a implementação atual e também registram limitações conhecidas, como ausência de persistência, autenticação e processamento real de pagamentos. Os ADRs devem ser consultados quando houver alterações arquiteturais ou ampliação do escopo do projeto.
 
-## 11. Diferenças e refinamentos da implementação
+## 11. Diferenças e refinamentos em relação à Entrega 2
 
-Durante o refinamento do projeto, foram detalhadas regras de validação para os dados do doador, para a ONG e para o valor da doação. Também foram reforçados o tratamento de valores numéricos inválidos, a prevenção de confirmações duplicadas e os requisitos da interface web.
+Em relação à Entrega 2, o DOA FÁCIL passou por refinamentos nas regras de negócio, na interface web, nos testes automatizados e na documentação técnica.
 
-A cobertura de testes foi definida de acordo com o RNF04, que exige 100% de cobertura do módulo de domínio. A interface web também é avaliada, mas não possui a mesma meta obrigatória.
+As principais alterações foram:
 
-As alterações e os problemas identificados durante o desenvolvimento devem ser consultados em `docs/ERROS.md` e nos respectivos registros de decisões arquiteturais.
+- **Validação dos dados:** foram reforçadas as verificações dos dados do doador, do nome da ONG e do valor da doação.
+- **Tratamento de valores monetários:** foram incluídas validações para rejeitar valores não numéricos e valores especiais, como `NaN` e `Infinity`, evitando exceções fora do contrato previsto.
+- **Confirmação de doações:** foi reforçada a regra que impede confirmar novamente uma doação que já esteja confirmada.
+- **Interface web:** foram documentadas as rotas para exibir a página inicial, criar doações, consultar os registros e confirmar doações.
+- **Testes e cobertura:** o critério de cobertura foi formalizado no ADR-005, mantendo a meta de 100% para `app/domain.py` e o acompanhamento da cobertura de `app/web.py`.
+- **Documentação e rastreabilidade:** as regras, os erros identificados e as decisões técnicas foram registrados na especificação, em `docs/ERROS.md` e nos ADRs.
+
+Esses refinamentos buscam manter a implementação alinhada aos requisitos definidos e facilitar a manutenção do projeto. Os registros históricos de testes e correções devem ser interpretados conforme a etapa em que foram produzidos, sem serem confundidos com os resultados da versão atual.
+
+Os resultados atuais de testes e cobertura são apresentados na seção de limitações deste documento e no README, com indicação de que correspondem à execução local.
 
 ## 12. Limitações conhecidas
 
 - As doações são armazenadas em memória e são perdidas quando o servidor é reiniciado.
 - O projeto não implementa autenticação de usuários nem persistência em banco de dados.
+- O sistema não realiza transações financeiras nem processa pagamentos reais.
 - A interface web tem finalidade demonstrativa e possui tratamento de erros limitado ao escopo da entrega.
 - A cobertura de testes não garante, isoladamente, a ausência de defeitos.
 - Os resultados de cobertura devem ser atualizados após mudanças no código ou nos testes.
 
-A execução local registrada apresentou 20 testes aprovados, com 100% de cobertura em `app/domain.py`, 67% em `app/web.py` e 78% de cobertura total. Esses resultados são da execução local e não comprovam a execução dos testes em Docker.
+Na execução local registrada, foram aprovados 20 testes, com 100% de cobertura em `app/domain.py`, 67% em `app/web.py` e 78% de cobertura total. Esses resultados correspondem à execução local e não comprovam a execução dos testes em Docker. Os números devem ser atualizados caso uma nova execução produza resultados diferentes.
