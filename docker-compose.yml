@@ -1,0 +1,4 @@
+services:
+  tests:
+    build: .
+    command: pytest -v --cov=app --cov-report=term-missing
