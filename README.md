@@ -39,9 +39,10 @@ doafacil/
 
 ## Pré-requisitos
 
-- Python 3.11 ou superior
-- `pip` e `git`
-- Docker (opcional, para execução padronizada)
+- Python 3.11 ou superior;
+- `Git, caso queira clonar o repositório;`
+- `pip, para instalar as dependências;`
+- Docker (opcional, para execução padronizada).
 
 ## Como executar localmente
 
