@@ -84,13 +84,15 @@ O objetivo da Entrega 3 é documentar e validar a versão final do DOA FÁCIL (A
 
 **Observação:** a conversão e o arredondamento monetário seguem o comportamento de `Decimal` e `quantize` do Python. O código não define explicitamente um modo de arredondamento, portanto utiliza o padrão do contexto decimal.
 
-### 6.2 `confirmar_doacao(doacao) -> Doacao`
+### 6.2 Contrato: `confirmar_doacao(doacao) -> Doacao`
 
-**Entrada**: instância de `Doacao` no estado `PENDENTE`.
+**Entrada:** instância de `Doacao`.
 
-**Saída (sucesso)**: a mesma instância, agora com `estado = CONFIRMADA`.
+**Saída (sucesso):** a mesma instância, com `estado = CONFIRMADA`, desde que ainda não esteja confirmada.
 
-**Saída (erro)**: `DomainError`, se a doação já estiver `CONFIRMADA`.
+**Saída (erro):** lança `DomainError` se a doação já estiver no estado `CONFIRMADA`.
+
+**Observação:** a função altera o estado da própria instância recebida e retorna essa mesma instância. O código não realiza persistência em banco de dados.
 
 ## 7. Decomposição em unidades
 
