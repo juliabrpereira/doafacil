@@ -1,10 +1,6 @@
 # DOA FÁCIL
 
-Gerenciador de doações que intermedeia doadores individuais e ONGs,
-reduzindo o desperdício de itens doáveis. Este repositório contém a
-versão intermediária do Bootcamp III (**Entrega 2**): núcleo de domínio, interface
-web de demonstração, especificação técnica orientada a SDD, harness de testes,
-registro de erros lógicos e decisões arquiteturais.
+Gerenciador de doações que intermedeia doadores individuais e ONGs, reduzindo o desperdício de itens doáveis. Este repositório contém a versão documentada e refinada do projeto DOA FÁCIL para o Bootcamp III (**Entrega 3**), incluindo o núcleo de domínio, a interface web de demonstração, a especificação técnica As-Built, os testes automatizados, o registro de erros lógicos e as decisões arquiteturais.
 
 > Nesta versão o sistema **não movimenta dinheiro real**. A "confirmação" de
 > uma doação é apenas uma mudança de estado validada pelo domínio, sem
@@ -94,15 +90,27 @@ em execução.
 
 ## Como executar com Docker
 
-O contêiner roda o harness de testes (`pytest -q`) no ambiente padronizado
-(Python 3.11), o mesmo usado pelo CI:
+Com o Docker instalado e em execução, abra o terminal na pasta raiz do projeto.
+
+Construa a imagem:
 
 ```bash
 docker build -t doa-facil .
+```
+
+Execute os testes no contêiner:
+
+```bash
 docker run --rm doa-facil
 ```
 
-Para a saída detalhada: `docker run --rm doa-facil pytest -v`.
+Para visualizar a saída detalhada dos testes:
+
+```bash
+docker run --rm doa-facil pytest -v
+```
+
+**Observação:** esses comandos descrevem como executar os testes no Docker. A execução só deve ser apresentada como validada depois que houver evidência de que ela foi concluída com sucesso.
 
 ## Agente de IA utilizado
 
