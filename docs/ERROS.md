@@ -67,26 +67,31 @@ pelo [PR #38](https://github.com/juliabrpereira/doafacil/pull/38) (merge
 - Causa: ramos sem teste: no domínio, ONG que não é `ONG` e valor não numérico;
   na interface, todo o fluxo `POST /confirmar/<n>` e as rotas 404.
 - Classificação: especificação/processo (afirmação não verificada).
-- Correção: testes novos; RNF04 reescrito: 100% para `app/domain.py`, medido
-  para `app/web.py`. Resultado: `domain.py` 100%, `web.py` 86%, total 91%.
-- Prevenção: rodar `pytest --cov=app --cov-report=term-missing` e colar o
+- Correção: testes novos; RNF04 reescrito para exigir 100% apenas no núcleo
+  (`app/domain.py`), acompanhando a medição de `app/web.py`.
+  
+- Resultado final (Entrega 3): 20 testes aprovados com 100% de cobertura em
+  `app/domain.py` (43 instruções), 67% em `app/web.py` (81 instruções) e
+  78% de cobertura total (124 instruções).
+- Prevenção: rodar `pytest --cov=app --cov-report=term-missing` e registrar o
   resumo no PR.
 - Referências: Issue [#28](https://github.com/juliabrpereira/doafacil/issues/28)
   · PR [#38](https://github.com/juliabrpereira/doafacil/pull/38)
   · SPEC §8, linha "RNF04 — 100% de cobertura apenas para `app/domain.py`".
 
 ## E-05 · Evidência de testes fora do ambiente padronizado
-- Detecção: os prints da Entrega 2 mostram pytest 9.1.1 e Python 3.12.4, mas
-  `requirements.txt` fixa pytest 8.3.3 e o Dockerfile e o CI usam Python 3.11.
+- Detecção: os prints das entregas anteriores mostravam divergência entre a execução local e o ambiente padronizado fixado em `requirements.txt` e Dockerfile (Python 3.11).
 - Causa: execução em ambiente local sem o ambiente padronizado.
 - Classificação: processo.
-- Correção: gerar o log final com `docker run --rm doa-facil` (ver
-  `logs_testes_final.txt`).
+- Correção: gerar o log final padronizado com `docker run --rm doa-facil` (ver
+  `logs_testes_final.txt`). Na execução local da Entrega 3 foram confirmados
+  20 testes aprovados e 78% de cobertura total (100% no domínio).
 - Prevenção: o template de PR pede o resumo do `pytest` no ambiente padronizado.
-- Referências: PR [#41] (`chore/log-testes-final`, Fase 6)
+- Referências: PR [#41](https://github.com/juliabrpereira/doafacil/pull/41)
   · SPEC: sem linha própria (erro de processo).
 
 ## Prova vermelho → verde (E-01 e E-02)
+**Verde:** os mesmos testes com a correção do PR #38 e validação final da suíte consolidada da Entrega 3 (20 testes aprovados, 100% de cobertura em `app/domain.py`, 67% em `app/web.py` e 78% no total).
 
 **Detecção:** o harness original passava (17 passed), mas os testes
 exploratórios reproduziam E-01 (`NaN` levanta `InvalidOperation`) e E-02
