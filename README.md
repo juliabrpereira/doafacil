@@ -1,10 +1,6 @@
 # DOA FÁCIL
 
-Gerenciador de doações que intermedeia doadores individuais e ONGs,
-reduzindo o desperdício de itens doáveis. Este repositório contém a
-versão intermediária do Bootcamp III (**Entrega 2**): núcleo de domínio, interface
-web de demonstração, especificação técnica orientada a SDD, harness de testes,
-registro de erros lógicos e decisões arquiteturais.
+Gerenciador de doações que intermedeia doadores individuais e ONGs, reduzindo o desperdício de itens doáveis. Este repositório contém a versão documentada e refinada do projeto DOA FÁCIL para o Bootcamp III (**Entrega 3**), incluindo o núcleo de domínio, a interface web de demonstração, a especificação técnica As-Built, os testes automatizados, o registro de erros lógicos e as decisões arquiteturais.
 
 > Nesta versão o sistema **não movimenta dinheiro real**. A "confirmação" de
 > uma doação é apenas uma mudança de estado validada pelo domínio, sem
@@ -26,7 +22,11 @@ doafacil/
 │   ├── ERROS.md               # Registro de erros lógicos
 │   └── img/                   # Evidências (prints dos testes)
 ├── adr/
-│   └── ADR-001..004.md        # Decisões arquiteturais
+    ├── ADR-001.md
+    ├── ADR-002.md
+    ├── ADR-003.md
+    ├── ADR-004.md
+    └── ADR-005.md      
 ├── .github/
 │   ├── pull_request_template.md  # Template de PR com critérios de aceitação
 │   └── workflows/tests.yml    # Pipeline de CI (roda pytest a cada push/PR)
@@ -39,9 +39,10 @@ doafacil/
 
 ## Pré-requisitos
 
-- Python 3.11 ou superior
-- `pip` e `git`
-- Docker (opcional, para execução padronizada)
+- **Python 3.11** ou superior;
+- **Git** (caso queira clonar o repositório);
+- **pip** (gerenciador de pacotes para instalar as dependências);
+- **Docker** (opcional, para execução padronizada em contêiner).
 
 ## Como executar localmente
 
@@ -70,7 +71,7 @@ python -m pytest -q
 Resultado esperado:
 
 ```text
-34 passed
+20 passed
 ```
 
 ## Interface de demonstração
@@ -90,15 +91,27 @@ em execução.
 
 ## Como executar com Docker
 
-O contêiner roda o harness de testes (`pytest -q`) no ambiente padronizado
-(Python 3.11), o mesmo usado pelo CI:
+Com o Docker instalado e em execução, abra o terminal na pasta raiz do projeto.
+
+Construa a imagem:
 
 ```bash
 docker build -t doa-facil .
+```
+
+Execute os testes no contêiner:
+
+```bash
 docker run --rm doa-facil
 ```
 
-Para a saída detalhada: `docker run --rm doa-facil pytest -v`.
+Para visualizar a saída detalhada dos testes:
+
+```bash
+docker run --rm doa-facil pytest -v
+```
+
+**Observação:** esses comandos descrevem como executar os testes no Docker. A execução só deve ser apresentada como validada depois que houver evidência de que ela foi concluída com sucesso.
 
 ## Agente de IA utilizado
 
@@ -137,6 +150,7 @@ Project.
 - [ADR-002](adr/ADR-002.md) — Interface web mínima sem framework, dados em memória.
 - [ADR-003](adr/ADR-003.md) — Dinheiro com `Decimal`, duas casas e valor finito.
 - [ADR-004](adr/ADR-004.md) — Estado do servidor em atributo de classe.
+- [ADR-005](adr/ADR-005.md) — Critérios de cobertura dos testes automatizados.
 
 ## Especificação técnica
 
@@ -182,12 +196,11 @@ sequenceDiagram
 
 ## Qualidade e evidências
 
-- Testes: `python -m pytest -q` (34 testes).
-- Cobertura: `python -m pytest --cov=app --cov-report=term-missing` (usa o
-  `pytest-cov`, incluído no `requirements.txt`).
+- Testes: `python -m pytest -q` (20 testes).
+- Cobertura local: `app/domain.py` — 100%; `app/web.py` — 67%; total — 78%. Resultados da execução local, não do Docker.
 - Erros lógicos e correções: [`docs/ERROS.md`](docs/ERROS.md).
 - Refinamentos da especificação: seção 8 de [`docs/especificacao-sdd.md`](docs/especificacao-sdd.md).
-- Decisões: ADR-001 a ADR-004 em [`adr/`](adr/).
+- Decisões: ADR-001 a ADR-005 em [`adr/`](adr/).
 
 ## Limitações atuais (escopo futuro)
 
@@ -196,3 +209,9 @@ sem framework. Ainda não foram implementados uma API HTTP para integrações,
 banco de dados, autenticação, notificações ou pagamento real. Essas frentes
 estão descritas no `Backlog do Produto - DoaFácil` e serão endereçadas em
 sprints futuras.
+
+## Variáveis de ambiente
+
+## ⚙️ Variáveis de Ambiente
+
+O projeto **não exige variáveis de ambiente** para sua execução padrão e ambiente de testes.
