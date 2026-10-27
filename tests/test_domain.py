@@ -2,7 +2,7 @@ from decimal import Decimal
 
 import pytest
 
-from app.domain import DomainError, Doacao, EstadoDoacao, ONG, confirmar_doacao, criar_doacao
+from app.domain import DomainError, EstadoDoacao, ONG, confirmar_doacao, criar_doacao
 
 
 def test_ong_e_criada_ativa_por_padrao():
