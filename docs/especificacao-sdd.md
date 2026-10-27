@@ -19,7 +19,7 @@ localmente a criação e a confirmação de uma doação; ela não faz parte do
 núcleo de domínio.
 
 Na Entrega 2, a especificação foi refinada a partir dos erros lógicos
-registrados em [`docs/ERROS.md`](ERROS.md). As mudanças estão na seção 8.
+registrados em [`ERROS.md`](ERROS.md). As mudanças estão na seção 8.
 
 O objetivo da Entrega 3 é documentar e validar a versão final do DOA FÁCIL (As-Built), incluindo sua arquitetura implementada, regras de negócio, contratos, decisões arquiteturais, limitações conhecidas e evidências disponíveis de testes e cobertura.
 
@@ -46,25 +46,17 @@ O objetivo da Entrega 3 é documentar e validar a versão final do DOA FÁCIL (A
 
 ## 5. Regras de negócio
 
-- **RN01** — Uma doação só pode ser criada se o nome do doador for informado
-  (não vazio após remoção de espaços).
-- **RN02** — O e-mail do doador deve respeitar um formato mínimo válido
-  (`texto@texto.texto`).
+- **RN01** — Uma doação só pode ser criada se o nome do doador for informado (não vazio após remoção de espaços).
+- **RN02** — O e-mail do doador deve respeitar um formato mínimo válido (`texto@texto.texto`).
 - **RN03** — A ONG de destino precisa estar com `ativa = True`.
 - **RN04** — O valor da doação deve ser maior que zero.
-- **RN05** — O e-mail é normalizado para letras minúsculas e sem espaços nas
-  extremidades antes de ser persistido em memória.
-- **RN06** — O valor monetário é convertido para `Decimal` com duas casas
-  decimais.
+- **RN05** — O e-mail é normalizado para letras minúsculas e sem espaços nas extremidades antes de ser persistido em memória.
+- **RN06** — O valor monetário é convertido para `Decimal` com duas casas decimais.
 - **RN07** — Toda doação nasce no estado `PENDENTE`.
-- **RN08** — Uma doação `PENDENTE` pode ser confirmada, mudando o estado
-  para `CONFIRMADA`.
-- **RN09** — Uma doação `CONFIRMADA` não pode ser confirmada novamente; a
-  tentativa deve levantar um erro de domínio (`DomainError`).
-- **RN10** — A ONG de destino deve ter nome informado (não vazio após remoção
-  de espaços).
-- **RN11** — O valor deve ser um número finito. `NaN`, `Infinity` e textos não
-  numéricos são rejeitados com `DomainError`.
+- **RN08** — Uma doação `PENDENTE` pode ser confirmada, mudando o estado para `CONFIRMADA`.
+- **RN09** — Uma doação `CONFIRMADA` não pode ser confirmada novamente; a tentativa deve levantar um erro de domínio (`DomainError`).
+- **RN10** — A ONG de destino deve ter nome informado (não vazio após remoção de espaços).
+- **RN11** — O valor deve ser um número finito. `NaN`, `Infinity` e textos não numéricos são rejeitados com `DomainError`.
 
 ## 6. Contratos de entrada e saída
 
@@ -103,9 +95,7 @@ O objetivo da Entrega 3 é documentar e validar a versão final do DOA FÁCIL (A
 | `criar_doacao` (caso de uso) | Validar e instanciar uma nova doação | Depende apenas das entidades acima |
 | `confirmar_doacao` (caso de uso) | Validar e aplicar a transição de estado | Depende apenas da entidade `Doacao` |
 
-Essa decomposição permite que, em sprints futuras, cada unidade seja
-conectada a uma camada de persistência, API HTTP ou fila de eventos sem
-alterar as regras de negócio já validadas.
+Essa decomposição permite que, em sprints futuras, cada unidade seja conectada a uma camada de persistência, API HTTP ou fila de eventos sem alterar as regras de negócio já validadas.
 
 ## 8. Histórico de refinamentos
 
@@ -124,6 +114,7 @@ alterar as regras de negócio já validadas.
 A aplicação está organizada em duas partes principais. O módulo `app/domain.py` concentra as regras de negócio, incluindo validações, criação e confirmação de doações. O módulo `app/web.py` disponibiliza uma interface web simples para interação com essas funcionalidades.
 
 Os testes automatizados estão organizados no diretório `tests/` e utilizam `pytest`. A ferramenta `pytest-cov` é utilizada para medir a cobertura do código. Os dados das doações permanecem em memória durante a execução do servidor, sem persistência em banco de dados.
+
 ### 9.1 Rotas e contratos da interface web
 
 A interface web é implementada em `app/web.py`, utilizando `HTTPServer` e `BaseHTTPRequestHandler`, da biblioteca padrão do Python. As operações de negócio são delegadas às funções do módulo `app/domain.py`.
@@ -144,8 +135,7 @@ As funções de apoio `criar_doacao_por_formulario`, `renderizar_landing`, `rend
 
 **Persistência e limitações:** a lista de doações é mantida em memória na classe `DoaFacilHandler`. Portanto, os registros não constituem armazenamento persistente e são perdidos quando o processo é encerrado. A confirmação utiliza um índice da lista, adequado à demonstração atual, mas sem garantia de identificação persistente do registro. Rotas não reconhecidas retornam HTTP 404.
 
-
-### 10. Decisões arquiteturais
+## 10. Decisões arquiteturais
 
 As decisões arquiteturais do DOA FÁCIL estão registradas nos documentos ADR (*Architecture Decision Records*) armazenados na pasta `adr/`. Esses registros descrevem as escolhas realizadas pela equipe, suas justificativas, alternativas consideradas e limitações aceitas.
 
@@ -168,7 +158,7 @@ As principais alterações foram:
 - **Confirmação de doações:** foi reforçada a regra que impede confirmar novamente uma doação que já esteja confirmada.
 - **Interface web:** foram documentadas as rotas para exibir a página inicial, criar doações, consultar os registros e confirmar doações.
 - **Testes e cobertura:** o critério de cobertura foi formalizado no ADR-005, mantendo a meta de 100% para `app/domain.py` e o acompanhamento da cobertura de `app/web.py`.
-- **Documentação e rastreabilidade:** as regras, os erros identificados e as decisões técnicas foram registrados na especificação, em `docs/ERROS.md` e nos ADRs.
+- **Documentação e rastreabilidade:** as regras, os erros identificados e as decisões técnicas foram registrados na especificação, em [`ERROS.md`](ERROS.md) e nos ADRs.
 
 Esses refinamentos buscam manter a implementação alinhada aos requisitos definidos e facilitar a manutenção do projeto. Os registros históricos de testes e correções devem ser interpretados conforme a etapa em que foram produzidos, sem serem confundidos com os resultados da versão atual.
 
