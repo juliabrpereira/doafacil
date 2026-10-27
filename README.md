@@ -39,10 +39,10 @@ doafacil/
 
 ## Pré-requisitos
 
-- Python 3.11 ou superior;
-- `Git, caso queira clonar o repositório;`
-- `pip, para instalar as dependências;`
-- Docker (opcional, para execução padronizada).
+- **Python 3.11** ou superior;
+- **Git** (caso queira clonar o repositório);
+- **pip** (gerenciador de pacotes para instalar as dependências);
+- **Docker** (opcional, para execução padronizada em contêiner).
 
 ## Como executar localmente
 
@@ -212,4 +212,6 @@ sprints futuras.
 
 ## Variáveis de ambiente
 
-O projeto não exige variáveis de ambiente para sua execução.
+## ⚙️ Variáveis de Ambiente
+
+O projeto **não exige variáveis de ambiente** para sua execução padrão e ambiente de testes.
