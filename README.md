@@ -32,6 +32,7 @@ doafacil/
 │   └── workflows/tests.yml    # Pipeline de CI (roda pytest a cada push/PR)
 ├── .cursorrules               # Diretrizes para agentes de IA
 ├── Dockerfile                 # Ambiente reproduzível
+├── docker-compose.yml         # Serviços app e tests
 ├── logs_testes_final.txt      # Log dos testes no ambiente padronizado
 ├── requirements.txt           # Dependências do projeto
 └── README.md
@@ -91,27 +92,21 @@ em execução.
 
 ## Como executar com Docker
 
-Com o Docker instalado e em execução, abra o terminal na pasta raiz do projeto.
-
-Construa a imagem:
+Com o Docker instalado e em execução, abra o terminal na pasta raiz do projeto e execute:
 
 ```bash
-docker build -t doa-facil .
+docker compose up --build
 ```
 
-Execute os testes no contêiner:
+Esse comando levanta a aplicação em `http://localhost:8000` e também executa a suíte de testes em um serviço separado. O processo da aplicação fica ativo no terminal, enquanto o serviço de testes roda e encerra após a execução.
+
+Para rodar apenas os testes, sem subir a aplicação:
 
 ```bash
-docker run --rm doa-facil
+docker compose run --rm tests
 ```
 
-Para visualizar a saída detalhada dos testes:
-
-```bash
-docker run --rm doa-facil pytest -v
-```
-
-**Observação:** esses comandos descrevem como executar os testes no Docker. A execução só deve ser apresentada como validada depois que houver evidência de que ela foi concluída com sucesso.
+**Observação:** a execução em contêiner só deve ser apresentada como validada após confirmação de que o comando foi concluído com sucesso no ambiente de execução.
 
 ## Agente de IA utilizado
 
@@ -196,8 +191,8 @@ sequenceDiagram
 
 ## Qualidade e evidências
 
-- Testes: `python -m pytest -q` (20 testes).
-- Cobertura local: `app/domain.py` — 100%; `app/web.py` — 67%; total — 78%. Resultados da execução local, não do Docker.
+- Testes: `docker compose run --rm tests` (34 testes).
+- Cobertura no Docker (`docker compose run --rm tests pytest -q --cov=app`): `app/domain.py` — 100%; `app/web.py` — 85%; total — 91%. Log em [`logs_testes_final.txt`](logs_testes_final.txt).
 - Erros lógicos e correções: [`docs/ERROS.md`](docs/ERROS.md).
 - Refinamentos da especificação: seção 8 de [`docs/especificacao-sdd.md`](docs/especificacao-sdd.md).
 - Decisões: ADR-001 a ADR-005 em [`adr/`](adr/).
@@ -211,7 +206,5 @@ estão descritas no `Backlog do Produto - DoaFácil` e serão endereçadas em
 sprints futuras.
 
 ## Variáveis de ambiente
-
-## ⚙️ Variáveis de Ambiente
 
 O projeto **não exige variáveis de ambiente** para sua execução padrão e ambiente de testes.

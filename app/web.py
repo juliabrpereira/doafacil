@@ -4,6 +4,7 @@ Execute com ``python -m app.web`` e abra http://localhost:8000.
 Os dados são mantidos apenas em memória, como no escopo atual do MVP.
 """
 
+import os
 from html import escape
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs
@@ -123,11 +124,6 @@ def renderizar_doacoes(doacoes, mensagem=""):
     )
 
 
-def renderizar_pagina(doacao, mensagem=""):
-    """Mantém a renderização de uma doação para os consumidores existentes."""
-    return renderizar_doacoes([doacao], mensagem)
-
-
 class DoaFacilHandler(BaseHTTPRequestHandler):
     """Manipulador HTTP das doações de demonstração em memória."""
 
@@ -189,9 +185,13 @@ class DoaFacilHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
 
-def executar_servidor(porta=8000):
-    """Inicia a aplicação local."""
-    servidor = HTTPServer(("localhost", porta), DoaFacilHandler)
+def executar_servidor(porta=8000, host=None):
+    """Inicia a aplicação local.
+
+    O host padrão é ``localhost``; no Docker, ``HOST=0.0.0.0`` expõe a porta mapeada.
+    """
+    host = host or os.environ.get("HOST", "localhost")
+    servidor = HTTPServer((host, porta), DoaFacilHandler)
     print(f"DOA FÁCIL disponível em http://localhost:{porta}")
     servidor.serve_forever()
 

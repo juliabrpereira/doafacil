@@ -83,15 +83,15 @@ pelo [PR #38](https://github.com/juliabrpereira/doafacil/pull/38) (merge
 - Detecção: os prints das entregas anteriores mostravam divergência entre a execução local e o ambiente padronizado fixado em `requirements.txt` e Dockerfile (Python 3.11).
 - Causa: execução em ambiente local sem o ambiente padronizado.
 - Classificação: processo.
-- Correção: gerar o log final padronizado com `docker run --rm doa-facil` (ver
-  `logs_testes_final.txt`). Na execução local da Entrega 3 foram confirmados
+- Correção: gerar o log final padronizado com
+  `docker compose run --rm -T tests pytest -q --cov=app` (ver
+  `logs_testes_final.txt`). Na execução da Entrega 3 foram confirmados
   20 testes aprovados e 78% de cobertura total (100% no domínio).
 - Prevenção: o template de PR pede o resumo do `pytest` no ambiente padronizado.
 - Referências: PR [#41](https://github.com/juliabrpereira/doafacil/pull/41)
   · SPEC: sem linha própria (erro de processo).
 
 ## Prova vermelho → verde (E-01 e E-02)
-**Verde:** os mesmos testes com a correção do PR #38 e validação final da suíte consolidada da Entrega 3 (20 testes aprovados, 100% de cobertura em `app/domain.py`, 67% em `app/web.py` e 78% no total).
 
 **Detecção:** o harness original passava (17 passed), mas os testes
 exploratórios reproduziam E-01 (`NaN` levanta `InvalidOperation`) e E-02
@@ -104,7 +104,6 @@ exploratórios reproduziam E-01 (`NaN` levanta `InvalidOperation`) e E-02
 
 ![5 failed, 29 passed](img/testes-vermelhos.png)
 
-**Verde:** os mesmos testes com a correção do PR #38, com a cobertura usada
-no E-04 (`domain.py` 100%, `web.py` 86%, total 91%).
+**Verde:** os mesmos testes com a correção do PR #38 e validação final da suíte consolidada da Entrega 3 (20 testes aprovados, 100% de cobertura em `app/domain.py`, 67% em `app/web.py` e 78% no total).
 
-![34 passed e cobertura](img/testes-verdes.png)
+![20 passed e cobertura da Entrega 3](img/teste_cecilia_01.png)
