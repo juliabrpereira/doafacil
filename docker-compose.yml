@@ -1,4 +1,14 @@
 services:
+  app:
+    build: .
+    command: python -m app.web
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/src/app
+
   tests:
     build: .
-    command: pytest -v --cov=app --cov-report=term-missing
+    command: pytest -q
+    volumes:
+      - .:/usr/src/app
