@@ -1,53 +1,4 @@
-﻿Execucao em: 30/10/2026 16:00:40 | commit: 36650ee
-#1 [internal] load local bake definitions
-#1 reading from stdin 534B 0.0s done
-#1 DONE 0.0s
-
-#2 [internal] load build definition from Dockerfile
-#2 transferring dockerfile: 228B 0.0s done
-#2 DONE 0.1s
-
-#3 [internal] load metadata for docker.io/library/python:3.11-slim
-#3 DONE 1.1s
-
-#4 [internal] load .dockerignore
-#4 transferring context: 119B 0.0s done
-#4 DONE 0.1s
-
-#5 [internal] load build context
-#5 transferring context: 58.99kB 0.1s done
-#5 DONE 0.1s
-
-#6 [1/5] FROM docker.io/library/python:3.11-slim@sha256:673719e071ecf27434fd2635bbd8d00f49f4fdd81f243143438a42ced8bedf60
-#6 resolve docker.io/library/python:3.11-slim@sha256:673719e071ecf27434fd2635bbd8d00f49f4fdd81f243143438a42ced8bedf60 0.1s done
-#6 DONE 0.1s
-
-#7 [2/5] WORKDIR /usr/src/app
-#7 CACHED
-
-#8 [3/5] COPY requirements.txt ./
-#8 CACHED
-
-#9 [4/5] RUN pip install --no-cache-dir -r requirements.txt
-#9 CACHED
-
-#10 [5/5] COPY . .
-#10 DONE 0.1s
-
-#11 exporting to image
-#11 exporting layers
-#11 exporting layers 0.2s done
-#11 exporting manifest sha256:8975df13711caa8d9d28d9064f4b89e6fb2c8e7a3919ad3d536b6be1d22ade34 0.1s done
-#11 exporting config sha256:38efc95ece59cc875e9b2c09057e0c8a226d226d8f473eb024bfbaed51204f9b 0.1s done
-#11 exporting attestation manifest sha256:5454bf69a63adcdb6bf3f3eec18d16464e44cee268fee45a5e6ee9e5646212b1 0.1s done
-#11 exporting manifest list sha256:d649d3f54da4d131bcb74735c8e4de8ed724f4a9228a55a60b9c752688768ae3
-#11 exporting manifest list sha256:d649d3f54da4d131bcb74735c8e4de8ed724f4a9228a55a60b9c752688768ae3 0.0s done
-#11 naming to docker.io/library/doafacil-tests:latest done
-#11 unpacking to docker.io/library/doafacil-tests:latest 0.1s done
-#11 DONE 0.8s
-
-#12 resolving provenance for metadata file
-#12 DONE 0.0s
+﻿Execucao em: 30/10/2026 16:04:17 | commit: 4f2e994
 ..................................                                       [100%]
 ================================ tests coverage ================================
 _______________ coverage: platform linux, python 3.11.18-final-0 _______________
@@ -59,4 +10,4 @@ app/domain.py        48      0   100%
 app/web.py           81     12    85%
 -------------------------------------
 TOTAL               129     12    91%
-34 passed in 6.95s
+34 passed in 6.04s
