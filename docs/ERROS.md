@@ -84,7 +84,7 @@ pelo [PR #38](https://github.com/juliabrpereira/doafacil/pull/38) (merge
 - Causa: execução em ambiente local sem o ambiente padronizado.
 - Classificação: processo.
 - Correção: gerar o log final padronizado com `docker run --rm doa-facil` (ver
-  `logs_testes_final.txt`). Na execução local da Entrega 3 foram confirmados
+  `logs_testes_final.txt`). Na execução da Entrega 3 foram confirmados
   20 testes aprovados e 78% de cobertura total (100% no domínio).
 - Prevenção: o template de PR pede o resumo do `pytest` no ambiente padronizado.
 - Referências: PR [#41](https://github.com/juliabrpereira/doafacil/pull/41)
