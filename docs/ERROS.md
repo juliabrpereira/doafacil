@@ -105,4 +105,4 @@ exploratórios reproduziam E-01 (`NaN` levanta `InvalidOperation`) e E-02
 
 **Verde:** os mesmos testes com a correção do PR #38 e validação final da suíte consolidada da Entrega 3 (20 testes aprovados, 100% de cobertura em `app/domain.py`, 67% em `app/web.py` e 78% no total).
 
-![20 passed e cobertura da Entrega 3](img/teste_cecilia__.png)
+![20 passed e cobertura da Entrega 3](img/teste_cecilia_01.png)
