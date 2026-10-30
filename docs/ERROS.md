@@ -91,7 +91,6 @@ pelo [PR #38](https://github.com/juliabrpereira/doafacil/pull/38) (merge
   · SPEC: sem linha própria (erro de processo).
 
 ## Prova vermelho → verde (E-01 e E-02)
-**Verde:** os mesmos testes com a correção do PR #38 e validação final da suíte consolidada da Entrega 3 (20 testes aprovados, 100% de cobertura em `app/domain.py`, 67% em `app/web.py` e 78% no total).
 
 **Detecção:** o harness original passava (17 passed), mas os testes
 exploratórios reproduziam E-01 (`NaN` levanta `InvalidOperation`) e E-02
@@ -104,7 +103,6 @@ exploratórios reproduziam E-01 (`NaN` levanta `InvalidOperation`) e E-02
 
 ![5 failed, 29 passed](img/testes-vermelhos.png)
 
-**Verde:** os mesmos testes com a correção do PR #38, com a cobertura usada
-no E-04 (`domain.py` 100%, `web.py` 86%, total 91%).
+**Verde:** os mesmos testes com a correção do PR #38 e validação final da suíte consolidada da Entrega 3 (20 testes aprovados, 100% de cobertura em `app/domain.py`, 67% em `app/web.py` e 78% no total).
 
-![34 passed e cobertura](img/testes-verdes.png)
+![20 passed e cobertura da Entrega 3](img/teste_cecilia.png)
