@@ -1,43 +1,13 @@
-﻿============================= test session starts ==============================
-platform linux -- Python 3.11.17, pytest-8.3.3, pluggy-1.7.0 -- /usr/local/bin/python3.11
-cachedir: .pytest_cache
-rootdir: /usr/src/app
-plugins: cov-7.1.0
-collecting ... collected 34 items
+﻿Execucao em: 30/10/2026 13:39:52 | commit: 5cd69e4
+..................................                                       [100%]
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.18-final-0 _______________
 
-tests/test_domain.py::test_ong_e_criada_ativa_por_padrao PASSED          [  2%]
-tests/test_domain.py::test_ong_pode_ser_criada_inativa PASSED            [  5%]
-tests/test_domain.py::test_doacao_e_criada_pendente_com_dados_normalizados PASSED [  8%]
-tests/test_domain.py::test_criar_doacao_rejeita_dados_invalidos[   -ana@example.com-25-Nome do doador] PASSED [ 11%]
-tests/test_domain.py::test_criar_doacao_rejeita_dados_invalidos[Ana Silva-ana@invalid-25-E-mail do doador] PASSED [ 14%]
-tests/test_domain.py::test_criar_doacao_rejeita_dados_invalidos[Ana Silva-ana@example.com-0-maior que zero] PASSED [ 17%]
-tests/test_domain.py::test_criar_doacao_rejeita_dados_invalidos[Ana Silva-ana@example.com--5-maior que zero] PASSED [ 20%]
-tests/test_domain.py::test_criar_doacao_rejeita_ong_inativa PASSED       [ 23%]
-tests/test_domain.py::test_confirmar_doacao_altera_estado PASSED         [ 26%]
-tests/test_domain.py::test_confirmar_doacao_rejeita_confirmacao_duplicada PASSED [ 29%]
-tests/test_domain.py::test_criar_doacao_rejeita_valor_nao_finito[NaN] PASSED [ 32%]
-tests/test_domain.py::test_criar_doacao_rejeita_valor_nao_finito[sNaN] PASSED [ 35%]
-tests/test_domain.py::test_criar_doacao_rejeita_valor_nao_finito[Infinity] PASSED [ 38%]
-tests/test_domain.py::test_criar_doacao_rejeita_valor_nao_finito[-Infinity] PASSED [ 41%]
-tests/test_domain.py::test_criar_doacao_rejeita_valor_nao_numerico[abc] PASSED [ 44%]
-tests/test_domain.py::test_criar_doacao_rejeita_valor_nao_numerico[1,50] PASSED [ 47%]
-tests/test_domain.py::test_criar_doacao_rejeita_valor_nao_numerico[None] PASSED [ 50%]
-tests/test_domain.py::test_criar_doacao_aceita_menor_valor_positivo_e_rejeita_abaixo_dele PASSED [ 52%]
-tests/test_domain.py::test_criar_doacao_rejeita_ong_sem_nome[] PASSED    [ 55%]
-tests/test_domain.py::test_criar_doacao_rejeita_ong_sem_nome[   ] PASSED [ 58%]
-tests/test_domain.py::test_criar_doacao_rejeita_ong_que_nao_e_ong PASSED [ 61%]
-tests/test_web.py::test_pagina_exibe_formulario_para_criar_doacao PASSED [ 64%]
-tests/test_web.py::test_pagina_de_doacoes_exibe_confirmacao_para_doacao_pendente PASSED [ 67%]
-tests/test_web.py::test_formulario_de_criacao_exibe_campos_obrigatorios PASSED [ 70%]
-tests/test_web.py::test_formulario_cria_doacao_pendente_com_dados_normalizados PASSED [ 73%]
-tests/test_web.py::test_formulario_informa_erro_do_dominio_para_email_invalido PASSED [ 76%]
-tests/test_web.py::test_pagina_exibe_botao_para_doacao_pendente PASSED   [ 79%]
-tests/test_web.py::test_pagina_informa_confirmacao_sem_exibir_botao PASSED [ 82%]
-tests/test_web.py::test_formulario_informa_erro_para_valor_nao_finito PASSED [ 85%]
-tests/test_web.py::test_formulario_rejeita_ong_em_branco PASSED          [ 88%]
-tests/test_web.py::test_servidor_comeca_cada_teste_com_apenas_a_doacao_de_demonstracao PASSED [ 91%]
-tests/test_web.py::test_confirmar_pela_interface_altera_estado_e_bloqueia_duplicidade PASSED [ 94%]
-tests/test_web.py::test_confirmar_doacao_inexistente_retorna_404 PASSED  [ 97%]
-tests/test_web.py::test_rota_desconhecida_retorna_404 PASSED             [100%]
-
-============================== 34 passed in 3.77s ==============================
+Name              Stmts   Miss  Cover
+-------------------------------------
+app/__init__.py       0      0   100%
+app/domain.py        48      0   100%
+app/web.py           83     12    86%
+-------------------------------------
+TOTAL               131     12    91%
+34 passed in 4.82s

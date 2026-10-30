@@ -83,7 +83,8 @@ pelo [PR #38](https://github.com/juliabrpereira/doafacil/pull/38) (merge
 - Detecção: os prints das entregas anteriores mostravam divergência entre a execução local e o ambiente padronizado fixado em `requirements.txt` e Dockerfile (Python 3.11).
 - Causa: execução em ambiente local sem o ambiente padronizado.
 - Classificação: processo.
-- Correção: gerar o log final padronizado com `docker run --rm doa-facil` (ver
+- Correção: gerar o log final padronizado com
+  `docker compose run --rm -T tests pytest -q --cov=app` (ver
   `logs_testes_final.txt`). Na execução da Entrega 3 foram confirmados
   20 testes aprovados e 78% de cobertura total (100% no domínio).
 - Prevenção: o template de PR pede o resumo do `pytest` no ambiente padronizado.
