@@ -91,27 +91,21 @@ em execução.
 
 ## Como executar com Docker
 
-Com o Docker instalado e em execução, abra o terminal na pasta raiz do projeto.
-
-Construa a imagem:
+Com o Docker instalado e em execução, abra o terminal na pasta raiz do projeto e execute:
 
 ```bash
-docker build -t doa-facil .
+docker compose up --build
 ```
 
-Execute os testes no contêiner:
+Esse comando levanta a aplicação em `http://localhost:8000` e também executa a suíte de testes em um serviço separado. O processo da aplicação fica ativo no terminal, enquanto o serviço de testes roda e encerra após a execução.
+
+Para rodar apenas os testes, sem subir a aplicação:
 
 ```bash
-docker run --rm doa-facil
+docker compose run --rm tests
 ```
 
-Para visualizar a saída detalhada dos testes:
-
-```bash
-docker run --rm doa-facil pytest -v
-```
-
-**Observação:** esses comandos descrevem como executar os testes no Docker. A execução só deve ser apresentada como validada depois que houver evidência de que ela foi concluída com sucesso.
+**Observação:** a execução em contêiner só deve ser apresentada como validada após confirmação de que o comando foi concluído com sucesso no ambiente de execução.
 
 ## Agente de IA utilizado
 
