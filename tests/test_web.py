@@ -8,9 +8,9 @@ from app.domain import EstadoDoacao
 from app.web import (
     DoaFacilHandler,
     criar_doacao_demo,
+    renderizar_doacoes,
     renderizar_formulario,
     renderizar_landing,
-    renderizar_pagina,
 )
 
 
@@ -36,7 +36,7 @@ def test_pagina_exibe_formulario_para_criar_doacao():
 
 
 def test_pagina_de_doacoes_exibe_confirmacao_para_doacao_pendente():
-    pagina = renderizar_pagina(criar_doacao_demo()).decode("utf-8")
+    pagina = renderizar_doacoes([criar_doacao_demo()]).decode("utf-8")
 
     assert 'action="/confirmar/0"' in pagina
 
@@ -109,7 +109,7 @@ def test_formulario_informa_erro_do_dominio_para_email_invalido(servidor_web):
 
 
 def test_pagina_exibe_botao_para_doacao_pendente():
-    pagina = renderizar_pagina(criar_doacao_demo()).decode("utf-8")
+    pagina = renderizar_doacoes([criar_doacao_demo()]).decode("utf-8")
 
     assert 'action="/confirmar/0"' in pagina
     assert "Confirmar doação" in pagina
@@ -119,7 +119,7 @@ def test_pagina_informa_confirmacao_sem_exibir_botao():
     doacao = criar_doacao_demo()
     doacao.estado = EstadoDoacao.CONFIRMADA
 
-    pagina = renderizar_pagina(doacao).decode("utf-8")
+    pagina = renderizar_doacoes([doacao]).decode("utf-8")
 
     assert "Doação confirmada." in pagina
     assert "Confirmar doação</button>" not in pagina

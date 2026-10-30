@@ -32,6 +32,7 @@ doafacil/
 │   └── workflows/tests.yml    # Pipeline de CI (roda pytest a cada push/PR)
 ├── .cursorrules               # Diretrizes para agentes de IA
 ├── Dockerfile                 # Ambiente reproduzível
+├── docker-compose.yml         # Serviços app e tests
 ├── logs_testes_final.txt      # Log dos testes no ambiente padronizado
 ├── requirements.txt           # Dependências do projeto
 └── README.md
@@ -190,8 +191,8 @@ sequenceDiagram
 
 ## Qualidade e evidências
 
-- Testes: `python -m pytest -q` (20 testes).
-- Cobertura local: `app/domain.py` — 100%; `app/web.py` — 67%; total — 78%. Resultados da execução local, não do Docker.
+- Testes: `docker compose run --rm tests` (34 testes).
+- Cobertura no Docker (`docker compose run --rm tests pytest -q --cov=app`): `app/domain.py` — 100%; `app/web.py` — 85%; total — 91%. Log em [`logs_testes_final.txt`](logs_testes_final.txt).
 - Erros lógicos e correções: [`docs/ERROS.md`](docs/ERROS.md).
 - Refinamentos da especificação: seção 8 de [`docs/especificacao-sdd.md`](docs/especificacao-sdd.md).
 - Decisões: ADR-001 a ADR-005 em [`adr/`](adr/).

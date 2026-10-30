@@ -1,4 +1,4 @@
-﻿Execucao em: 30/10/2026 13:39:52 | commit: 5cd69e4
+﻿Execucao em: 30/10/2026 16:04:17 | commit: 4f2e994
 ..................................                                       [100%]
 ================================ tests coverage ================================
 _______________ coverage: platform linux, python 3.11.18-final-0 _______________
@@ -7,7 +7,7 @@ Name              Stmts   Miss  Cover
 -------------------------------------
 app/__init__.py       0      0   100%
 app/domain.py        48      0   100%
-app/web.py           83     12    86%
+app/web.py           81     12    85%
 -------------------------------------
-TOTAL               131     12    91%
-34 passed in 4.82s
+TOTAL               129     12    91%
+34 passed in 6.04s

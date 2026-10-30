@@ -12,4 +12,4 @@
 (ferramenta usada, o que foi gerado, o que foi ajustado à mão e por quê)
 
 ## Como validar
-`docker build -t doa-facil . && docker run --rm doa-facil`
+`docker compose run --rm tests`
