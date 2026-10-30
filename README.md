@@ -206,6 +206,4 @@ sprints futuras.
 
 ## Variáveis de ambiente
 
-## ⚙️ Variáveis de Ambiente
-
 O projeto **não exige variáveis de ambiente** para sua execução padrão e ambiente de testes.
