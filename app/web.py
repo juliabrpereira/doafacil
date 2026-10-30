@@ -124,11 +124,6 @@ def renderizar_doacoes(doacoes, mensagem=""):
     )
 
 
-def renderizar_pagina(doacao, mensagem=""):
-    """Mantém a renderização de uma doação para os consumidores existentes."""
-    return renderizar_doacoes([doacao], mensagem)
-
-
 class DoaFacilHandler(BaseHTTPRequestHandler):
     """Manipulador HTTP das doações de demonstração em memória."""
 

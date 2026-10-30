@@ -127,7 +127,7 @@ A interface web é implementada em `app/web.py`, utilizando `HTTPServer` e `Base
 | GET | `/doacoes` | Lista as doações mantidas em memória e permite confirmar aquelas que ainda estão pendentes. |
 | POST | `/confirmar/{indice}` | Localiza a doação pelo índice da lista e chama `confirmar_doacao`. Em caso de sucesso, redireciona para `/doacoes` com status HTTP 303. Se houver um erro de domínio, retorna HTTP 400; índices inválidos ou inexistentes resultam em HTTP 404. |
 
-As funções de apoio `criar_doacao_por_formulario`, `renderizar_landing`, `renderizar_formulario`, `renderizar_doacoes` e `renderizar_pagina` organizam o processamento dos dados e a apresentação das páginas.
+As funções de apoio `criar_doacao_por_formulario`, `renderizar_landing`, `renderizar_formulario` e `renderizar_doacoes` organizam o processamento dos dados e a apresentação das páginas.
 
 **Contrato de criação:** a rota `POST /criar` recebe nome do doador, e-mail, nome da ONG e valor da doação. Os dados são encaminhados à função `criar_doacao`, que aplica as validações do domínio. Uma operação válida adiciona a doação à lista em memória; uma operação inválida que gere `DomainError` retorna uma mensagem de erro.
 
